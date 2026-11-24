@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Daichi Nihongo Trainer (Complete Lessons 0–13)</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --primary: #1e3a8a;
+      --primary-light: #eff6ff;
+      --accent: #0d9488;
+      --accent-light: #f0fdfa;
+      --danger: #dc2626;
+      --danger-light: #fef2f2;
+      --success: #16a34a;
+      --success-light: #f0fdf4;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --radius: 14px;
+      --shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Sans", "Noto Sans JP", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding-bottom: 48px;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+      color: white;
+      padding: 20px 24px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    }
+    .header-inner {
+      max-width: 980px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+    .brand h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand p {
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      margin-top: 2px;
+    }
+    .stats-bar {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .stat-pill {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .container {
+      max-width: 980px;
+      margin: 24px auto;
+      padding: 0 16px;
+    }
+
+    .controls-bar {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+    .toggle-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+    .toggle-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .toggle-btn.active {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    select.lesson-select {
+      padding: 7px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-size: 0.85rem;
+      font-weight: 600;
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 640px) {
+      .tabs { grid-template-columns: repeat(2, 1fr); }
+    }
+    .tab-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 10px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: center;
+    }
+    .tab-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .tab-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(30, 58, 138, 0.25);
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow);
+    }
+    .hidden { display: none !important; }
+
+    ruby { ruby-align: center; }
+    rt { font-size: 0.55em; color: var(--accent); font-weight: 600; }
+    body.hide-furigana rt { visibility: hidden; }
+    .romaji-text {
+      color: var(--muted);
+      font-size: 0.95rem;
+      font-style: italic;
+      margin-top: 4px;
+    }
+    body.hide-romaji .romaji-text { display: none; }
+
+    .audio-btn {
+      background: var(--accent-light);
+      color: var(--accent);
+      border: 1px solid #99f6e4;
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.1s;
+    }
+    .audio-btn:hover { background: #ccfbf1; }
+    .audio-btn:active { transform: scale(0.96); }
+
+    /* Flashcard Mode */
+    .flashcard-box {
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      min-height: 250px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 32px 20px;
+      cursor: pointer;
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      transition: border-color 0.2s, transform 0.15s;
+      position: relative;
+    }
+    .flashcard-box:hover { border-color: var(--primary); }
+    .badge-lesson {
+      position: absolute;
+      top: 14px;
+      left: 16px;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+    .badge-pos {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      background: #f1f5f9;
+      color: var(--muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+    .jp-main {
+      font-size: 2.3rem;
+      font-weight: 700;
+      margin: 12px 0 4px;
+    }
+    .meaning-box {
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px dashed var(--border);
+      width: 100%;
+      max-width: 460px;
+    }
+    .meaning-en {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .meaning-id {
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .nav-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 10px 18px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn:hover { background: #f1f5f9; }
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+    .btn-primary:hover { background: #172554; }
+    .btn-accent {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+    .btn-accent:hover { background: #0f766e; }
+
+    /* Quiz & Drill Options */
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .prompt-en {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .prompt-id {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+    .jp-sentence-box {
+      background: var(--primary-light);
+      border-left: 4px solid var(--primary);
+      padding: 16px 20px;
+      border-radius: 10px;
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    @media (max-width: 600px) {
+      .options-grid { grid-template-columns: 1fr; }
+    }
+    .option-btn {
+      text-align: left;
+      padding: 14px 18px;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface);
+      font-size: 1.05rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .option-btn:hover:not(:disabled) {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+    .option-btn.correct {
+      border-color: var(--success);
+      background: var(--success-light);
+      color: #14532d;
+    }
+    .option-btn.wrong {
+      border-color: var(--danger);
+      background: var(--danger-light);
+      color: #7f1d1d;
+    }
+
+    .feedback-banner {
+      margin-top: 18px;
+      padding: 14px 18px;
+      border-radius: 10px;
+      font-size: 0.92rem;
+    }
+    .feedback-banner.success {
+      background: var(--success-light);
+      border: 1px solid #86efac;
+      color: #14532d;
+    }
+    .feedback-banner.error {
+      background: var(--danger-light);
+      border: 1px solid #fca5a5;
+      color: #7f1d1d;
+    }
+
+    /* Sentence Builder */
+    .answer-dropzone {
+      min-height: 64px;
+      border: 2px dashed #94a3b8;
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      background: #f8fafc;
+      margin-bottom: 16px;
+    }
+    .word-bank {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .word-tile {
+      background: white;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.12s;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .word-tile:hover {
+      background: var(--primary-light);
+      transform: translateY(-2px);
+    }
+    .word-tile.used {
+      opacity: 0.35;
+      pointer-events: none;
+      border-color: var(--border);
+      color: var(--muted);
+    }
+    .word-tile span.tile-sub {
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--muted);
+    }
+    body.hide-romaji .word-tile span.tile-sub { display: none; }
+
+    /* Grammar & JSON Tab */
+    .grammar-item {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 14px;
+      background: #fafafa;
+    }
+    .grammar-pattern {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    textarea.json-editor {
+      width: 100%;
+      height: 280px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.82rem;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #0f172a;
+      color: #e2e8f0;
+      margin-top: 10px;
+      resize: vertical;
+    }
+    .search-input {
+      padding: 7px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-size: 0.85rem;
+      min-width: 190px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <h1>🇯🇵 Daichi Nihongo Trainer <span style="font-size:0.75rem; background:#0d9488; padding:3px 9px; border-radius:999px;">Complete L0–L13</span></h1>
+      <p>Nihongo Shokyu 1 Daichi (360 Vocabulary, Grammar, Particle Drills &amp; Sentence Builder)</p>
+    </div>
+    <div class="stats-bar">
+      <div class="stat-pill">⭐ Score: <span id="score-val">0</span></div>
+      <div class="stat-pill">🔥 Streak: <span id="streak-val">0</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <!-- Display & Filter Controls -->
+  <div class="controls-bar">
+    <div class="toggle-group">
+      <button id="btn-furigana" class="toggle-btn active" onclick="toggleFurigana()">あ Furigana: ON</button>
+      <button id="btn-romaji" class="toggle-btn active" onclick="toggleRomaji()">Aa Romaji: ON</button>
+    </div>
+    <div class="toggle-group">
+      <input type="text" id="vocab-search" class="search-input" placeholder="Search JP / EN / ID..." oninput="handleSearch()" />
+      <label for="lesson-filter" style="font-size:0.85rem; font-weight:600; color:var(--muted);">Lesson:</label>
+      <select id="lesson-filter" class="lesson-select" onchange="filterByLesson()">
+        <option value="all">All Lessons (L0–L13)</option>
+        <option value="0">Hajimemashou (Intro)</option>
+        <option value="1">Lesson 1</option>
+        <option value="2">Lesson 2</option>
+        <option value="3">Lesson 3</option>
+        <option value="4">Lesson 4</option>
+        <option value="5">Lesson 5</option>
+        <option value="6">Lesson 6</option>
+        <option value="7">Lesson 7</option>
+        <option value="8">Lesson 8</option>
+        <option value="9">Lesson 9</option>
+        <option value="10">Lesson 10</option>
+        <option value="11">Lesson 11</option>
+        <option value="12">Lesson 12</option>
+        <option value="13">Lesson 13 &amp; Review</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Navigation Tabs -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('vocab', this)">1. Vocabulary (単語)</button>
+    <button class="tab-btn" onclick="switchTab('grammar', this)">2. Grammar Drill (文法)</button>
+    <button class="tab-btn" onclick="switchTab('sentence', this)">3. Sentence Builder (文作り)</button>
+    <button class="tab-btn" onclick="switchTab('reference', this)">4. Grammar &amp; JSON</button>
+  </div>
+
+  <!-- TAB 1: VOCABULARY -->
+  <div id="tab-vocab" class="card">
+    <div class="question-header">
+      <div>
+        <span style="font-weight:700; color:var(--primary);">Vocabulary Study &amp; Quick Quiz</span>
+        <span id="vocab-counter" style="font-size:0.85rem; color:var(--muted); margin-left:8px;"></span>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button id="mode-flashcard-btn" class="btn btn-primary" onclick="setVocabMode('flashcard')">Flashcards</button>
+        <button id="mode-quiz-btn" class="btn" onclick="setVocabMode('quiz')">Quick Quiz</button>
+      </div>
+    </div>
+
+    <!-- Flashcard View -->
+    <div id="vocab-flashcard-view">
+      <div class="flashcard-box" onclick="flipCard()">
+        <span class="badge-lesson" id="fc-lesson">Lesson 1</span>
+        <span class="badge-pos" id="fc-pos">noun</span>
+        <div class="jp-main" id="fc-jp"></div>
+        <div class="romaji-text" id="fc-romaji"></div>
+        <div style="margin-top:10px;" onclick="event.stopPropagation()">
+          <button class="audio-btn" onclick="speakCurrentVocab()">🔊 Listen (音声)</button>
+        </div>
+        <div id="fc-meaning" class="meaning-box hidden">
+          <div class="meaning-en" id="fc-en"></div>
+          <div class="meaning-id" id="fc-id"></div>
+        </div>
+        <p id="fc-hint" style="font-size:0.8rem; color:var(--muted); margin-top:16px;">Click card to reveal meaning / Klik kartu untuk melihat arti</p>
+      </div>
+      <div class="nav-row">
+        <button class="btn" onclick="prevCard()">← Previous</button>
+        <button class="btn" onclick="shuffleVocab()">🔀 Shuffle</button>
+        <button class="btn btn-primary" onclick="nextCard()">Next →</button>
+      </div>
+    </div>
+
+    <!-- Vocab Quiz View -->
+    <div id="vocab-quiz-view" class="hidden">
+      <div class="jp-sentence-box" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+        <div>
+          <div id="vq-jp" style="font-size:1.8rem;"></div>
+          <div id="vq-romaji" class="romaji-text" style="font-size:0.95rem;"></div>
+        </div>
+        <button class="audio-btn" onclick="speakText(currentVocabQuiz.kana)">🔊 Listen</button>
+      </div>
+      <div id="vq-options" class="options-grid"></div>
+      <div id="vq-feedback" class="feedback-banner hidden"></div>
+      <div class="nav-row">
+        <span></span>
+        <button class="btn btn-primary" onclick="nextVocabQuiz()">Next Word →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: GRAMMAR & PARTICLE DRILL -->
+  <div id="tab-grammar" class="card hidden">
+    <div class="question-header">
+      <span id="gd-badge" style="background:var(--primary-light); color:var(--primary); padding:4px 12px; border-radius:999px; font-size:0.8rem; font-weight:700;">Lesson 4 • Particle</span>
+      <span id="gd-counter" style="font-size:0.85rem; color:var(--muted);">Question 1 / 16</span>
+    </div>
+    <div class="prompt-en" id="gd-prompt-en"></div>
+    <div class="prompt-id" id="gd-prompt-id"></div>
+
+    <div class="jp-sentence-box" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+      <div>
+        <div id="gd-sentence"></div>
+        <div id="gd-romaji" class="romaji-text"></div>
+      </div>
+      <button class="audio-btn" onclick="speakDrillSentence()">🔊 Listen</button>
+    </div>
+
+    <div id="gd-options" class="options-grid"></div>
+    <div id="gd-feedback" class="feedback-banner hidden"></div>
+
+    <div class="nav-row">
+      <button class="btn" onclick="prevDrill()">← Previous</button>
+      <button class="btn btn-primary" onclick="nextDrill()">Next Question →</button>
+    </div>
+  </div>
+
+  <!-- TAB 3: SENTENCE BUILDER -->
+  <div id="tab-sentence" class="card hidden">
+    <div class="question-header">
+      <span id="sb-badge" style="background:var(--accent-light); color:var(--accent); padding:4px 12px; border-radius:999px; font-size:0.8rem; font-weight:700;">Lesson 12 • Translation &amp; Word Order</span>
+      <span id="sb-counter" style="font-size:0.85rem; color:var(--muted);">Puzzle 1 / 10</span>
+    </div>
+    <div class="prompt-en" id="sb-prompt-en"></div>
+    <div class="prompt-id" id="sb-prompt-id"></div>
+
+    <div style="font-size:0.82rem; font-weight:700; color:var(--muted); margin-bottom:6px;">YOUR SENTENCE (Click tiles below to build):</div>
+    <div id="sb-dropzone" class="answer-dropzone"></div>
+
+    <div style="font-size:0.82rem; font-weight:700; color:var(--muted); margin-bottom:6px;">WORD BANK:</div>
+    <div id="sb-wordbank" class="word-bank"></div>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <button class="btn btn-accent" onclick="checkSentence()">✓ Check Answer</button>
+      <button class="btn" onclick="resetSentence()">↺ Clear</button>
+      <button class="audio-btn" onclick="speakSentenceAnswer()">🔊 Hear Target Answer</button>
+    </div>
+
+    <div id="sb-feedback" class="feedback-banner hidden"></div>
+
+    <div class="nav-row">
+      <button class="btn" onclick="prevSentence()">← Previous Puzzle</button>
+      <button class="btn btn-primary" onclick="nextSentence()">Next Puzzle →</button>
+    </div>
+  </div>
+
+  <!-- TAB 4: GRAMMAR REFERENCE & JSON EDITOR -->
+  <div id="tab-reference" class="card hidden">
+    <h3 style="color:var(--primary); margin-bottom:12px;">Grammar Summary (Nihongo Shokyu 1 Daichi L1–L13)</h3>
+    <div id="grammar-ref-list"></div>
+
+    <hr style="border:none; border-top:1px solid var(--border); margin:24px 0;" />
+
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+      <div>
+        <h3 style="color:var(--primary);">Embedded JSON Dataset (360 Words + Grammar + Drills)</h3>
+        <p style="font-size:0.85rem; color:var(--muted);">Full dataset pre-loaded. You can edit or download a backup JSON anytime.</p>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn" onclick="downloadCurrentJSON()">⬇ Download JSON</button>
+        <button class="btn btn-primary" onclick="applyCustomJSON()">Apply JSON Changes</button>
+      </div>
+    </div>
+    <textarea id="json-editor-box" class="json-editor"></textarea>
+    <div id="json-status" class="feedback-banner hidden"></div>
+  </div>
+</div>
+
+<script>
+// COMPLETE EMBEDDED DATASET (360 Vocab, 11 Grammar Patterns, 16 Drills, 10 Sentences)
+let appData = {"metadata": {"title": "Nihongo Shokyu 1 Daichi Complete Dataset (Lessons 0-13)", "sources": ["Daichi_json_kata.pdf", "Daichi_pr.pdf"], "counts": {"vocabulary": 360, "grammar": 11, "drills": 16, "sentences": 10}}, "vocabulary": [{"lesson": 0, "kanji": "おはようございます", "kana": "おはようございます", "romaji": "ohayou gozaimasu", "pos": "phrase", "en": "Good morning.", "id": "Selamat pagi."}, {"lesson": 0, "kanji": "こんにちは", "kana": "こんにちは", "romaji": "konnichiwa", "pos": "phrase", "en": "Hello.", "id": "Halo / Selamat siang."}, {"lesson": 0, "kanji": "こんばんは", "kana": "こんばんは", "romaji": "konbanwa", "pos": "phrase", "en": "Good evening.", "id": "Selamat malam."}, {"lesson": 0, "kanji": "さようなら", "kana": "さようなら", "romaji": "sayounara", "pos": "phrase", "en": "Goodbye.", "id": "Selamat tinggal."}, {"lesson": 0, "kanji": "ありがとうございます", "kana": "ありがとうございます", "romaji": "arigatou gozaimasu", "pos": "phrase", "en": "Thank you (very much).", "id": "Terima kasih (banyak)."}, {"lesson": 0, "kanji": "すみません", "kana": "すみません", "romaji": "sumimasen", "pos": "phrase", "en": "I'm sorry / Excuse me.", "id": "Maaf / Permisi."}, {"lesson": 0, "kanji": "いただきます", "kana": "いただきます", "romaji": "itadakimasu", "pos": "phrase", "en": "I'll start (before eating/drinking).", "id": "Selamat makan (sebelum makan)."}, {"lesson": 0, "kanji": "ごちそうさまでした", "kana": "ごちそうさまでした", "romaji": "gochisousama deshita", "pos": "phrase", "en": "Thank you for the good food.", "id": "Terima kasih atas makanannya."}, {"lesson": 0, "kanji": "失礼します", "kana": "しつれいします", "romaji": "shitsurei shimasu", "pos": "phrase", "en": "Excuse me (entering/leaving a room).", "id": "Permisi (masuk/keluar ruangan)."}, {"lesson": 0, "kanji": "警察", "kana": "けいさつ", "romaji": "keisatsu", "pos": "noun", "en": "police station", "id": "kantor polisi"}, {"lesson": 0, "kanji": "消防署", "kana": "しょうぼうしょ", "romaji": "shoubousho", "pos": "noun", "en": "fire station", "id": "pemadam kebakaran"}, {"lesson": 0, "kanji": "学校", "kana": "がっこう", "romaji": "gakkou", "pos": "noun", "en": "school", "id": "sekolah"}, {"lesson": 0, "kanji": "市役所", "kana": "しやくしょ", "romaji": "shiyakusho", "pos": "noun", "en": "city office, city hall", "id": "kantor balai kota"}, {"lesson": 0, "kanji": "会社", "kana": "かいしゃ", "romaji": "kaisha", "pos": "noun", "en": "company", "id": "perusahaan"}, {"lesson": 0, "kanji": "午前", "kana": "ごぜん", "romaji": "gozen", "pos": "noun", "en": "morning, a.m.", "id": "pagi, a.m."}, {"lesson": 0, "kanji": "午後", "kana": "ごご", "romaji": "gogo", "pos": "noun", "en": "afternoon, p.m.", "id": "siang/sore, p.m."}, {"lesson": 0, "kanji": "今何時ですか", "kana": "いまなんじですか", "romaji": "ima nanji desu ka", "pos": "phrase", "en": "What time is it now?", "id": "Sekarang jam berapa?"}, {"lesson": 0, "kanji": "始めましょう", "kana": "はじめましょう", "romaji": "hajimemashou", "pos": "phrase", "en": "Let's start.", "id": "Mari kita mulai."}, {"lesson": 0, "kanji": "終わりましょう", "kana": "おわりましょう", "romaji": "owarimashou", "pos": "phrase", "en": "Let's finish.", "id": "Mari kita akhiri."}, {"lesson": 0, "kanji": "休みましょう", "kana": "やすみましょう", "romaji": "yasumimashou", "pos": "phrase", "en": "Let's take a break.", "id": "Mari kita istirahat."}, {"lesson": 0, "kanji": "分かりますか", "kana": "わかりますか", "romaji": "wakarimasu ka", "pos": "phrase", "en": "Do you understand?", "id": "Apakah Anda mengerti?"}, {"lesson": 0, "kanji": "見てください", "kana": "みてください", "romaji": "mite kudasai", "pos": "phrase", "en": "Please look.", "id": "Tolong lihat."}, {"lesson": 0, "kanji": "聞いてください", "kana": "きいてください", "romaji": "kiite kudasai", "pos": "phrase", "en": "Please listen.", "id": "Tolong dengarkan."}, {"lesson": 0, "kanji": "書いてください", "kana": "かいてください", "romaji": "kaite kudasai", "pos": "phrase", "en": "Please write.", "id": "Tolong tulis."}, {"lesson": 0, "kanji": "もう一度言ってください", "kana": "もういちどいってください", "romaji": "mou ichido itte kudasai", "pos": "phrase", "en": "Please say it again.", "id": "Tolong ucapkan sekali lagi."}, {"lesson": 0, "kanji": "名前", "kana": "なまえ", "romaji": "namae", "pos": "noun", "en": "name", "id": "nama"}, {"lesson": 0, "kanji": "試験", "kana": "しけん", "romaji": "shiken", "pos": "noun", "en": "examination, test", "id": "ujian"}, {"lesson": 0, "kanji": "宿題", "kana": "しゅくだい", "romaji": "shukudai", "pos": "noun", "en": "homework", "id": "pekerjaan rumah (PR)"}, {"lesson": 0, "kanji": "例", "kana": "れい", "romaji": "rei", "pos": "noun", "en": "example", "id": "contoh"}, {"lesson": 0, "kanji": "質問", "kana": "しつもん", "romaji": "shitsumon", "pos": "noun", "en": "question", "id": "pertanyaan"}, {"lesson": 0, "kanji": "答え", "kana": "こたえ", "romaji": "kotae", "pos": "noun", "en": "answer", "id": "jawaban"}, {"lesson": 0, "kanji": "携帯電話", "kana": "けいたいでんわ", "romaji": "keitai denwa", "pos": "noun", "en": "mobile phone", "id": "telepon genggam"}, {"lesson": 1, "kanji": "わたし", "kana": "わたし", "romaji": "watashi", "pos": "pronoun", "en": "I", "id": "saya"}, {"lesson": 1, "kanji": "学生", "kana": "がくせい", "romaji": "gakusei", "pos": "noun", "en": "student", "id": "mahasiswa / pelajar"}, {"lesson": 1, "kanji": "～人", "kana": "～じん", "romaji": "~jin", "pos": "suffix", "en": "a national of ~", "id": "warga negara ~"}, {"lesson": 1, "kanji": "エンジニア", "kana": "エンジニア", "romaji": "enjinia", "pos": "noun", "en": "engineer", "id": "insinyur / teknisi"}, {"lesson": 1, "kanji": "銀行員", "kana": "ぎんこういん", "romaji": "ginkouin", "pos": "noun", "en": "bank employee", "id": "pegawai bank"}, {"lesson": 1, "kanji": "会社員", "kana": "かいしゃいん", "romaji": "kaishain", "pos": "noun", "en": "company employee", "id": "karyawan perusahaan"}, {"lesson": 1, "kanji": "先生", "kana": "せんせい", "romaji": "sensei", "pos": "noun", "en": "teacher, instructor", "id": "guru / dosen"}, {"lesson": 1, "kanji": "研究員", "kana": "けんきゅういん", "romaji": "kenkyuuin", "pos": "noun", "en": "researcher", "id": "peneliti"}, {"lesson": 1, "kanji": "日本語学校", "kana": "にほんごがっこう", "romaji": "nihongo gakkou", "pos": "noun", "en": "Japanese language school", "id": "sekolah bahasa Jepang"}, {"lesson": 1, "kanji": "大学", "kana": "だいがく", "romaji": "daigaku", "pos": "noun", "en": "university", "id": "universitas"}, {"lesson": 1, "kanji": "寮", "kana": "りょう", "romaji": "ryou", "pos": "noun", "en": "dormitory", "id": "asrama"}, {"lesson": 1, "kanji": "管理人", "kana": "かんりにん", "romaji": "kanrinin", "pos": "noun", "en": "concierge, caretaker", "id": "penjaga / pengelola asrama"}, {"lesson": 1, "kanji": "お国", "kana": "おくに", "romaji": "okuni", "pos": "noun", "en": "(someone else's) country", "id": "negara (orang lain)"}, {"lesson": 1, "kanji": "趣味", "kana": "しゅみ", "romaji": "shumi", "pos": "noun", "en": "hobby", "id": "hobi"}, {"lesson": 1, "kanji": "水泳", "kana": "すいえい", "romaji": "suiei", "pos": "noun", "en": "swimming", "id": "berenang"}, {"lesson": 1, "kanji": "友達", "kana": "ともだち", "romaji": "tomodachi", "pos": "noun", "en": "friend", "id": "teman"}, {"lesson": 1, "kanji": "初めまして", "kana": "はじめまして", "romaji": "hajimemashite", "pos": "phrase", "en": "How do you do?", "id": "Perkenalkan."}, {"lesson": 1, "kanji": "どうぞよろしくお願いします", "kana": "どうぞよろしくおねがいします", "romaji": "douzo yoroshiku onegaishimasu", "pos": "phrase", "en": "Nice to meet you.", "id": "Senang berkenalan dengan Anda."}, {"lesson": 1, "kanji": "～から来ました", "kana": "～からきました", "romaji": "~kara kimashita", "pos": "phrase", "en": "I came from ~.", "id": "Saya berasal dari ~."}, {"lesson": 1, "kanji": "中国", "kana": "ちゅうごく", "romaji": "Chuugoku", "pos": "noun", "en": "China", "id": "Tiongkok"}, {"lesson": 1, "kanji": "日本", "kana": "にほん", "romaji": "Nihon", "pos": "noun", "en": "Japan", "id": "Jepang"}, {"lesson": 1, "kanji": "韓国", "kana": "かんこく", "romaji": "Kankoku", "pos": "noun", "en": "Korea", "id": "Korea"}, {"lesson": 2, "kanji": "これ", "kana": "これ", "romaji": "kore", "pos": "pronoun", "en": "this (near speaker)", "id": "ini (dekat pembicara)"}, {"lesson": 2, "kanji": "それ", "kana": "それ", "romaji": "sore", "pos": "pronoun", "en": "that (near listener)", "id": "itu (dekat lawan bicara)"}, {"lesson": 2, "kanji": "あれ", "kana": "あれ", "romaji": "are", "pos": "pronoun", "en": "that (over there)", "id": "itu (jauh dari keduanya)"}, {"lesson": 2, "kanji": "ノート", "kana": "ノート", "romaji": "nooto", "pos": "noun", "en": "notebook", "id": "buku catatan"}, {"lesson": 2, "kanji": "本", "kana": "ほん", "romaji": "hon", "pos": "noun", "en": "book", "id": "buku"}, {"lesson": 2, "kanji": "雑誌", "kana": "ざっし", "romaji": "zasshi", "pos": "noun", "en": "magazine", "id": "majalah"}, {"lesson": 2, "kanji": "パソコン", "kana": "パソコン", "romaji": "pasokon", "pos": "noun", "en": "personal computer", "id": "komputer pribadi / laptop"}, {"lesson": 2, "kanji": "傘", "kana": "かさ", "romaji": "kasa", "pos": "noun", "en": "umbrella", "id": "payung"}, {"lesson": 2, "kanji": "かばん", "kana": "かばん", "romaji": "kaban", "pos": "noun", "en": "bag", "id": "tas"}, {"lesson": 2, "kanji": "テレビ", "kana": "テレビ", "romaji": "terebi", "pos": "noun", "en": "TV", "id": "televisi"}, {"lesson": 2, "kanji": "ボールペン", "kana": "ボールペン", "romaji": "boorupen", "pos": "noun", "en": "ballpoint pen", "id": "pulpen"}, {"lesson": 2, "kanji": "財布", "kana": "さいふ", "romaji": "saifu", "pos": "noun", "en": "wallet, purse", "id": "dompet"}, {"lesson": 2, "kanji": "新聞", "kana": "しんぶん", "romaji": "shinbun", "pos": "noun", "en": "newspaper", "id": "koran"}, {"lesson": 2, "kanji": "砂糖", "kana": "さとう", "romaji": "satou", "pos": "noun", "en": "sugar", "id": "gula"}, {"lesson": 2, "kanji": "塩", "kana": "しお", "romaji": "shio", "pos": "noun", "en": "salt", "id": "garam"}, {"lesson": 2, "kanji": "しょうゆ", "kana": "しょうゆ", "romaji": "shouyu", "pos": "noun", "en": "soy sauce", "id": "kecap asin"}, {"lesson": 2, "kanji": "水", "kana": "みず", "romaji": "mizu", "pos": "noun", "en": "water", "id": "air"}, {"lesson": 2, "kanji": "紅茶", "kana": "こうちゃ", "romaji": "koucha", "pos": "noun", "en": "English tea / black tea", "id": "teh hitam"}, {"lesson": 2, "kanji": "コーヒー", "kana": "コーヒー", "romaji": "koohii", "pos": "noun", "en": "coffee", "id": "kopi"}, {"lesson": 2, "kanji": "車", "kana": "くるま", "romaji": "kuruma", "pos": "noun", "en": "car", "id": "mobil"}, {"lesson": 2, "kanji": "～製", "kana": "～せい", "romaji": "~sei", "pos": "suffix", "en": "made in/by ~", "id": "buatan ~"}, {"lesson": 2, "kanji": "人", "kana": "ひと", "romaji": "hito", "pos": "noun", "en": "person", "id": "orang"}, {"lesson": 2, "kanji": "とり肉", "kana": "とりにく", "romaji": "toriniku", "pos": "noun", "en": "chicken", "id": "daging ayam"}, {"lesson": 2, "kanji": "牛肉", "kana": "ぎゅうにく", "romaji": "gyuuniku", "pos": "noun", "en": "beef", "id": "daging sapi"}, {"lesson": 2, "kanji": "牛どん", "kana": "ぎゅうどん", "romaji": "gyuudon", "pos": "noun", "en": "beef and onion on rice", "id": "nasi mangkuk daging sapi"}, {"lesson": 2, "kanji": "親子どん", "kana": "おやこどん", "romaji": "oyakodon", "pos": "noun", "en": "chicken and egg on rice", "id": "nasi mangkuk ayam dan telur"}, {"lesson": 2, "kanji": "何", "kana": "なん", "romaji": "nan", "pos": "pronoun", "en": "what", "id": "apa"}, {"lesson": 2, "kanji": "だれ", "kana": "だれ", "romaji": "dare", "pos": "pronoun", "en": "who", "id": "siapa"}, {"lesson": 3, "kanji": "ここ", "kana": "ここ", "romaji": "koko", "pos": "pronoun", "en": "here", "id": "di sini"}, {"lesson": 3, "kanji": "そこ", "kana": "そこ", "romaji": "soko", "pos": "pronoun", "en": "there", "id": "di situ"}, {"lesson": 3, "kanji": "あそこ", "kana": "あそこ", "romaji": "asoko", "pos": "pronoun", "en": "over there", "id": "di sana"}, {"lesson": 3, "kanji": "食堂", "kana": "しょくどう", "romaji": "shokudou", "pos": "noun", "en": "cafeteria, restaurant", "id": "kantin, ruang makan"}, {"lesson": 3, "kanji": "受付", "kana": "うけつけ", "romaji": "uketsuke", "pos": "noun", "en": "reception", "id": "resepsionis"}, {"lesson": 3, "kanji": "事務室", "kana": "じむしつ", "romaji": "jimushitsu", "pos": "noun", "en": "office", "id": "ruang kantor"}, {"lesson": 3, "kanji": "会議室", "kana": "かいぎしつ", "romaji": "kaigishitsu", "pos": "noun", "en": "meeting room", "id": "ruang rapat"}, {"lesson": 3, "kanji": "図書室", "kana": "としょしつ", "romaji": "toshoshitsu", "pos": "noun", "en": "library room", "id": "ruang perpustakaan"}, {"lesson": 3, "kanji": "教室", "kana": "きょうしつ", "romaji": "kyoushitsu", "pos": "noun", "en": "classroom", "id": "ruang kelas"}, {"lesson": 3, "kanji": "郵便局", "kana": "ゆうびんきょく", "romaji": "yuubinkyoku", "pos": "noun", "en": "post office", "id": "kantor pos"}, {"lesson": 3, "kanji": "病院", "kana": "びょういん", "romaji": "byouin", "pos": "noun", "en": "hospital", "id": "rumah sakit"}, {"lesson": 3, "kanji": "大使館", "kana": "たいしかん", "romaji": "taishikan", "pos": "noun", "en": "embassy", "id": "kedutaan besar"}, {"lesson": 3, "kanji": "銀行", "kana": "ぎんこう", "romaji": "ginkou", "pos": "noun", "en": "bank", "id": "bank"}, {"lesson": 3, "kanji": "コンビニ", "kana": "コンビニ", "romaji": "konbini", "pos": "noun", "en": "convenience store", "id": "minimarket"}, {"lesson": 3, "kanji": "駅", "kana": "えき", "romaji": "eki", "pos": "noun", "en": "station", "id": "stasiun"}, {"lesson": 3, "kanji": "辞書", "kana": "じしょ", "romaji": "jisho", "pos": "noun", "en": "dictionary", "id": "kamus"}, {"lesson": 3, "kanji": "地図", "kana": "ちず", "romaji": "chizu", "pos": "noun", "en": "map", "id": "peta"}, {"lesson": 3, "kanji": "冷蔵庫", "kana": "れいぞうこ", "romaji": "reizouko", "pos": "noun", "en": "refrigerator", "id": "kulkas"}, {"lesson": 3, "kanji": "時計", "kana": "とけい", "romaji": "tokei", "pos": "noun", "en": "clock, watch", "id": "jam"}, {"lesson": 3, "kanji": "電子レンジ", "kana": "でんしレンジ", "romaji": "denshi renji", "pos": "noun", "en": "microwave oven", "id": "oven microwave"}, {"lesson": 3, "kanji": "洗濯機", "kana": "せんたくき", "romaji": "sentakuki", "pos": "noun", "en": "washing machine", "id": "mesin cuci"}, {"lesson": 3, "kanji": "掃除機", "kana": "そうじき", "romaji": "soujiki", "pos": "noun", "en": "vacuum cleaner", "id": "penyedot debu"}, {"lesson": 3, "kanji": "お茶", "kana": "おちゃ", "romaji": "ocha", "pos": "noun", "en": "tea, green tea", "id": "teh, teh hijau"}, {"lesson": 3, "kanji": "靴", "kana": "くつ", "romaji": "kutsu", "pos": "noun", "en": "shoes", "id": "sepatu"}, {"lesson": 3, "kanji": "どこ", "kana": "どこ", "romaji": "doko", "pos": "pronoun", "en": "where", "id": "di mana"}, {"lesson": 3, "kanji": "いくら", "kana": "いくら", "romaji": "ikura", "pos": "pronoun", "en": "how much", "id": "berapa harganya"}, {"lesson": 4, "kanji": "パン", "kana": "パン", "romaji": "pan", "pos": "noun", "en": "bread", "id": "roti"}, {"lesson": 4, "kanji": "魚", "kana": "さかな", "romaji": "sakana", "pos": "noun", "en": "fish", "id": "ikan"}, {"lesson": 4, "kanji": "果物", "kana": "くだもの", "romaji": "kudamono", "pos": "noun", "en": "fruit", "id": "buah-buahan"}, {"lesson": 4, "kanji": "野菜", "kana": "やさい", "romaji": "yasai", "pos": "noun", "en": "vegetable", "id": "sayuran"}, {"lesson": 4, "kanji": "牛乳", "kana": "ぎゅうにゅう", "romaji": "gyuunyuu", "pos": "noun", "en": "milk", "id": "susu sapi"}, {"lesson": 4, "kanji": "卵", "kana": "たまご", "romaji": "tamago", "pos": "noun", "en": "egg", "id": "telur"}, {"lesson": 4, "kanji": "映画", "kana": "えいが", "romaji": "eiga", "pos": "noun", "en": "movie", "id": "film"}, {"lesson": 4, "kanji": "音楽", "kana": "おんがく", "romaji": "ongaku", "pos": "noun", "en": "music", "id": "musik"}, {"lesson": 4, "kanji": "手紙", "kana": "てがみ", "romaji": "tegami", "pos": "noun", "en": "letter", "id": "surat"}, {"lesson": 4, "kanji": "お金", "kana": "おかね", "romaji": "okane", "pos": "noun", "en": "money", "id": "uang"}, {"lesson": 4, "kanji": "切手", "kana": "きって", "romaji": "kitte", "pos": "noun", "en": "postage stamp", "id": "perangko"}, {"lesson": 4, "kanji": "図書館", "kana": "としょかん", "romaji": "toshokan", "pos": "noun", "en": "library", "id": "perpustakaan"}, {"lesson": 4, "kanji": "公園", "kana": "こうえん", "romaji": "kouen", "pos": "noun", "en": "park", "id": "taman"}, {"lesson": 4, "kanji": "朝ご飯", "kana": "あさごはん", "romaji": "asagohan", "pos": "noun", "en": "breakfast", "id": "sarapan"}, {"lesson": 4, "kanji": "昼ご飯", "kana": "ひるごはん", "romaji": "hirugohan", "pos": "noun", "en": "lunch", "id": "makan siang"}, {"lesson": 4, "kanji": "晩ご飯", "kana": "ばんごはん", "romaji": "bangohan", "pos": "noun", "en": "dinner, supper", "id": "makan malam"}, {"lesson": 4, "kanji": "食べます", "kana": "たべます", "romaji": "tabemasu", "pos": "verb_II", "en": "eat", "id": "makan"}, {"lesson": 4, "kanji": "飲みます", "kana": "のみます", "romaji": "nomimasu", "pos": "verb_I", "en": "drink", "id": "minum"}, {"lesson": 4, "kanji": "買います", "kana": "かいます", "romaji": "kaimasu", "pos": "verb_I", "en": "buy", "id": "membeli"}, {"lesson": 4, "kanji": "書きます", "kana": "かきます", "romaji": "kakimasu", "pos": "verb_I", "en": "write", "id": "menulis"}, {"lesson": 4, "kanji": "聞きます", "kana": "ききます", "romaji": "kikimasu", "pos": "verb_I", "en": "listen", "id": "mendengarkan"}, {"lesson": 4, "kanji": "見ます", "kana": "みます", "romaji": "mimasu", "pos": "verb_II", "en": "see, watch", "id": "melihat, menonton"}, {"lesson": 4, "kanji": "読みます", "kana": "よみます", "romaji": "yomimasu", "pos": "verb_I", "en": "read", "id": "membaca"}, {"lesson": 4, "kanji": "します", "kana": "します", "romaji": "shimasu", "pos": "verb_III", "en": "do, play", "id": "melakukan, bermain"}, {"lesson": 4, "kanji": "下ろします", "kana": "おろします", "romaji": "oroshimasu", "pos": "verb_I", "en": "withdraw [money]", "id": "menarik [uang]"}, {"lesson": 4, "kanji": "いつも", "kana": "いつも", "romaji": "itsumo", "pos": "adverb", "en": "always", "id": "selalu"}, {"lesson": 4, "kanji": "時々", "kana": "ときどき", "romaji": "tokidoki", "pos": "adverb", "en": "sometimes", "id": "kadang-kadang"}, {"lesson": 4, "kanji": "それから", "kana": "それから", "romaji": "sorekara", "pos": "conjunction", "en": "then, after that", "id": "kemudian, setelah itu"}, {"lesson": 5, "kanji": "説明会", "kana": "せつめいかい", "romaji": "setsumeikai", "pos": "noun", "en": "explanatory meeting, briefing", "id": "sesi penjelasan / pengarahan"}, {"lesson": 5, "kanji": "文法", "kana": "ぶんぽう", "romaji": "bunpou", "pos": "noun", "en": "grammar", "id": "tata bahasa"}, {"lesson": 5, "kanji": "会話", "kana": "かいわ", "romaji": "kaiwa", "pos": "noun", "en": "conversation", "id": "percakapan"}, {"lesson": 5, "kanji": "漢字", "kana": "かんじ", "romaji": "kanji", "pos": "noun", "en": "kanji, Chinese character", "id": "huruf kanji"}, {"lesson": 5, "kanji": "定食", "kana": "ていしょく", "romaji": "teishoku", "pos": "noun", "en": "set menu", "id": "menu paket"}, {"lesson": 5, "kanji": "アルバイト", "kana": "アルバイト", "romaji": "arubaito", "pos": "noun", "en": "part-time job", "id": "kerja paruh waktu"}, {"lesson": 5, "kanji": "月曜日", "kana": "げつようび", "romaji": "getsuyoubi", "pos": "noun", "en": "Monday", "id": "hari Senin"}, {"lesson": 5, "kanji": "火曜日", "kana": "かようび", "romaji": "kayoubi", "pos": "noun", "en": "Tuesday", "id": "hari Selasa"}, {"lesson": 5, "kanji": "水曜日", "kana": "すいようび", "romaji": "suiyoubi", "pos": "noun", "en": "Wednesday", "id": "hari Rabu"}, {"lesson": 5, "kanji": "木曜日", "kana": "もくようび", "romaji": "mokuyoubi", "pos": "noun", "en": "Thursday", "id": "hari Kamis"}, {"lesson": 5, "kanji": "金曜日", "kana": "きんようび", "romaji": "kinyoubi", "pos": "noun", "en": "Friday", "id": "hari Jumat"}, {"lesson": 5, "kanji": "土曜日", "kana": "どようび", "romaji": "doyoubi", "pos": "noun", "en": "Saturday", "id": "hari Sabtu"}, {"lesson": 5, "kanji": "日曜日", "kana": "にちようび", "romaji": "nichiyoubi", "pos": "noun", "en": "Sunday", "id": "hari Minggu"}, {"lesson": 5, "kanji": "起きます", "kana": "おきます", "romaji": "okimasu", "pos": "verb_II", "en": "get up, wake up", "id": "bangun tidur"}, {"lesson": 5, "kanji": "寝ます", "kana": "ねます", "romaji": "nemasu", "pos": "verb_II", "en": "go to bed, sleep", "id": "tidur"}, {"lesson": 5, "kanji": "勉強します", "kana": "べんきょうします", "romaji": "benkyou shimasu", "pos": "verb_III", "en": "study", "id": "belajar"}, {"lesson": 5, "kanji": "研究します", "kana": "けんきゅうします", "romaji": "kenkyuu shimasu", "pos": "verb_III", "en": "do research", "id": "meneliti"}, {"lesson": 5, "kanji": "働きます", "kana": "はたらきます", "romaji": "hatarakimasu", "pos": "verb_I", "en": "work", "id": "bekerja"}, {"lesson": 5, "kanji": "泳ぎます", "kana": "およぎます", "romaji": "oyogimasu", "pos": "verb_I", "en": "swim", "id": "berenang"}, {"lesson": 5, "kanji": "終わります", "kana": "おわります", "romaji": "owarimasu", "pos": "verb_I", "en": "finish, end", "id": "selesai"}, {"lesson": 5, "kanji": "始まります", "kana": "はじまります", "romaji": "hajimarimasu", "pos": "verb_I", "en": "start, begin", "id": "mulai"}, {"lesson": 5, "kanji": "練習します", "kana": "れんしゅうします", "romaji": "renshuu shimasu", "pos": "verb_III", "en": "practice", "id": "berlatih"}, {"lesson": 5, "kanji": "入ります", "kana": "はいります", "romaji": "hairimasu", "pos": "verb_I", "en": "enter (place + に)", "id": "masuk (tempat + に)"}, {"lesson": 5, "kanji": "休みます", "kana": "やすみます", "romaji": "yasumimasu", "pos": "verb_I", "en": "take a rest, take a holiday", "id": "beristirahat, libur"}, {"lesson": 5, "kanji": "作ります", "kana": "つくります", "romaji": "tsukurimasu", "pos": "verb_I", "en": "make", "id": "membuat"}, {"lesson": 6, "kanji": "誕生日", "kana": "たんじょうび", "romaji": "tanjoubi", "pos": "noun", "en": "birthday", "id": "ulang tahun"}, {"lesson": 6, "kanji": "飛行機", "kana": "ひこうき", "romaji": "hikouki", "pos": "noun", "en": "airplane", "id": "pesawat terbang"}, {"lesson": 6, "kanji": "電車", "kana": "でんしゃ", "romaji": "densha", "pos": "noun", "en": "train", "id": "kereta listrik"}, {"lesson": 6, "kanji": "自転車", "kana": "じてんしゃ", "romaji": "jitensha", "pos": "noun", "en": "bicycle", "id": "sepeda"}, {"lesson": 6, "kanji": "地下鉄", "kana": "ちかてつ", "romaji": "chikatetsu", "pos": "noun", "en": "subway", "id": "kereta bawah tanah"}, {"lesson": 6, "kanji": "動物園", "kana": "どうぶつえん", "romaji": "doubutsuen", "pos": "noun", "en": "zoo", "id": "kebun binatang"}, {"lesson": 6, "kanji": "お祭り", "kana": "おまつり", "romaji": "omatsuri", "pos": "noun", "en": "festival", "id": "festival"}, {"lesson": 6, "kanji": "花火", "kana": "はなび", "romaji": "hanabi", "pos": "noun", "en": "fireworks", "id": "kembang api"}, {"lesson": 6, "kanji": "お寺", "kana": "おてら", "romaji": "otera", "pos": "noun", "en": "temple", "id": "kuil Buddha"}, {"lesson": 6, "kanji": "新幹線", "kana": "しんかんせん", "romaji": "shinkansen", "pos": "noun", "en": "Shinkansen, bullet train", "id": "kereta cepat Shinkansen"}, {"lesson": 6, "kanji": "温泉", "kana": "おんせん", "romaji": "onsen", "pos": "noun", "en": "hot spring", "id": "pemandian air panas"}, {"lesson": 6, "kanji": "船", "kana": "ふね", "romaji": "fune", "pos": "noun", "en": "ship, boat", "id": "kapal"}, {"lesson": 6, "kanji": "行きます", "kana": "いきます", "romaji": "ikimasu", "pos": "verb_I", "en": "go", "id": "pergi"}, {"lesson": 6, "kanji": "帰ります", "kana": "かえります", "romaji": "kaerimasu", "pos": "verb_I", "en": "go home, return", "id": "pulang"}, {"lesson": 6, "kanji": "来ます", "kana": "きます", "romaji": "kimasu", "pos": "verb_III", "en": "come", "id": "datang"}, {"lesson": 6, "kanji": "食事します", "kana": "しょくじします", "romaji": "shokuji shimasu", "pos": "verb_III", "en": "take a meal", "id": "bersantap / makan"}, {"lesson": 6, "kanji": "会います", "kana": "あいます", "romaji": "aimasu", "pos": "verb_I", "en": "meet (person + に)", "id": "bertemu (orang + に)"}, {"lesson": 6, "kanji": "歩いて", "kana": "あるいて", "romaji": "aruite", "pos": "adverb", "en": "on foot", "id": "berjalan kaki"}, {"lesson": 6, "kanji": "一緒に", "kana": "いっしょに", "romaji": "issho ni", "pos": "adverb", "en": "together, with", "id": "bersama-sama"}, {"lesson": 6, "kanji": "一人で", "kana": "ひとりで", "romaji": "hitori de", "pos": "adverb", "en": "oneself, alone", "id": "sendirian"}, {"lesson": 7, "kanji": "花", "kana": "はな", "romaji": "hana", "pos": "noun", "en": "flower", "id": "bunga"}, {"lesson": 7, "kanji": "部屋", "kana": "へや", "romaji": "heya", "pos": "noun", "en": "room", "id": "kamar / ruangan"}, {"lesson": 7, "kanji": "食べ物", "kana": "たべもの", "romaji": "tabemono", "pos": "noun", "en": "food", "id": "makanan"}, {"lesson": 7, "kanji": "生活", "kana": "せいかつ", "romaji": "seikatsu", "pos": "noun", "en": "life, living", "id": "kehidupan"}, {"lesson": 7, "kanji": "山", "kana": "やま", "romaji": "yama", "pos": "noun", "en": "mountain", "id": "gunung"}, {"lesson": 7, "kanji": "海", "kana": "うみ", "romaji": "umi", "pos": "noun", "en": "sea", "id": "laut"}, {"lesson": 7, "kanji": "桜", "kana": "さくら", "romaji": "sakura", "pos": "noun", "en": "cherry blossom/tree", "id": "bunga sakura"}, {"lesson": 7, "kanji": "町", "kana": "まち", "romaji": "machi", "pos": "noun", "en": "city, town", "id": "kota"}, {"lesson": 7, "kanji": "写真", "kana": "しゃしん", "romaji": "shashin", "pos": "noun", "en": "photograph", "id": "foto"}, {"lesson": 7, "kanji": "建物", "kana": "たてもの", "romaji": "tatemono", "pos": "noun", "en": "building", "id": "bangunan / gedung"}, {"lesson": 7, "kanji": "大きい", "kana": "おおきい", "romaji": "ookii", "pos": "adj_i", "en": "big", "id": "besar"}, {"lesson": 7, "kanji": "小さい", "kana": "ちいさい", "romaji": "chiisai", "pos": "adj_i", "en": "small, little", "id": "kecil"}, {"lesson": 7, "kanji": "新しい", "kana": "あたらしい", "romaji": "atarashii", "pos": "adj_i", "en": "new", "id": "baru"}, {"lesson": 7, "kanji": "古い", "kana": "ふるい", "romaji": "furui", "pos": "adj_i", "en": "old", "id": "lama / tua"}, {"lesson": 7, "kanji": "面白い", "kana": "おもしろい", "romaji": "omoshiroi", "pos": "adj_i", "en": "interesting, funny", "id": "menarik, lucu"}, {"lesson": 7, "kanji": "高い", "kana": "たかい", "romaji": "takai", "pos": "adj_i", "en": "high, expensive", "id": "tinggi, mahal"}, {"lesson": 7, "kanji": "低い", "kana": "ひくい", "romaji": "hikui", "pos": "adj_i", "en": "low", "id": "rendah"}, {"lesson": 7, "kanji": "安い", "kana": "やすい", "romaji": "yasui", "pos": "adj_i", "en": "cheap", "id": "murah"}, {"lesson": 7, "kanji": "楽しい", "kana": "たのしい", "romaji": "tanoshii", "pos": "adj_i", "en": "enjoyable, fun", "id": "menyenangkan"}, {"lesson": 7, "kanji": "いい", "kana": "いい", "romaji": "ii", "pos": "adj_i", "en": "good", "id": "bagus, baik"}, {"lesson": 7, "kanji": "おいしい", "kana": "おいしい", "romaji": "oishii", "pos": "adj_i", "en": "delicious", "id": "enak, lezat"}, {"lesson": 7, "kanji": "難しい", "kana": "むずかしい", "romaji": "muzukashii", "pos": "adj_i", "en": "difficult", "id": "sulit"}, {"lesson": 7, "kanji": "広い", "kana": "ひろい", "romaji": "hiroi", "pos": "adj_i", "en": "wide, spacious", "id": "luas"}, {"lesson": 7, "kanji": "狭い", "kana": "せまい", "romaji": "semai", "pos": "adj_i", "en": "narrow", "id": "sempit"}, {"lesson": 7, "kanji": "元気", "kana": "げんき", "romaji": "genki", "pos": "adj_na", "en": "healthy, lively", "id": "sehat, bersemangat"}, {"lesson": 7, "kanji": "親切", "kana": "しんせつ", "romaji": "shinsetsu", "pos": "adj_na", "en": "kind", "id": "ramah, baik hati"}, {"lesson": 7, "kanji": "簡単", "kana": "かんたん", "romaji": "kantan", "pos": "adj_na", "en": "simple, easy", "id": "mudah, sederhana"}, {"lesson": 7, "kanji": "きれい", "kana": "きれい", "romaji": "kirei", "pos": "adj_na", "en": "beautiful, clean", "id": "cantik, bersih"}, {"lesson": 7, "kanji": "にぎやか", "kana": "にぎやか", "romaji": "nigiyaka", "pos": "adj_na", "en": "lively, bustling", "id": "ramai"}, {"lesson": 7, "kanji": "静か", "kana": "しずか", "romaji": "shizuka", "pos": "adj_na", "en": "quiet", "id": "tenang, sepi"}, {"lesson": 7, "kanji": "便利", "kana": "べんり", "romaji": "benri", "pos": "adj_na", "en": "convenient", "id": "praktis, nyaman"}, {"lesson": 7, "kanji": "有名", "kana": "ゆうめい", "romaji": "yuumei", "pos": "adj_na", "en": "famous", "id": "terkenal"}, {"lesson": 7, "kanji": "大変", "kana": "たいへん", "romaji": "taihen", "pos": "adj_na", "en": "hard, tough", "id": "berat, melelahkan"}, {"lesson": 8, "kanji": "男の子", "kana": "おとこのこ", "romaji": "otokonoko", "pos": "noun", "en": "boy", "id": "anak laki-laki"}, {"lesson": 8, "kanji": "女の子", "kana": "おんなのこ", "romaji": "onnanoko", "pos": "noun", "en": "girl", "id": "anak perempuan"}, {"lesson": 8, "kanji": "子供", "kana": "こども", "romaji": "kodomo", "pos": "noun", "en": "child", "id": "anak"}, {"lesson": 8, "kanji": "犬", "kana": "いぬ", "romaji": "inu", "pos": "noun", "en": "dog", "id": "anjing"}, {"lesson": 8, "kanji": "木", "kana": "き", "romaji": "ki", "pos": "noun", "en": "tree", "id": "pohon"}, {"lesson": 8, "kanji": "自動販売機", "kana": "じどうはんばいき", "romaji": "jidouhanbaiki", "pos": "noun", "en": "vending machine", "id": "mesin penjual otomatis"}, {"lesson": 8, "kanji": "猫", "kana": "ねこ", "romaji": "neko", "pos": "noun", "en": "cat", "id": "kucing"}, {"lesson": 8, "kanji": "箱", "kana": "はこ", "romaji": "hako", "pos": "noun", "en": "box", "id": "kotak"}, {"lesson": 8, "kanji": "机", "kana": "つくえ", "romaji": "tsukue", "pos": "noun", "en": "desk", "id": "meja tulis"}, {"lesson": 8, "kanji": "交番", "kana": "こうばん", "romaji": "kouban", "pos": "noun", "en": "police box", "id": "pos polisi"}, {"lesson": 8, "kanji": "上", "kana": "うえ", "romaji": "ue", "pos": "noun", "en": "on, above, over", "id": "atas"}, {"lesson": 8, "kanji": "下", "kana": "した", "romaji": "shita", "pos": "noun", "en": "under, below", "id": "bawah"}, {"lesson": 8, "kanji": "前", "kana": "まえ", "romaji": "mae", "pos": "noun", "en": "front, before", "id": "depan"}, {"lesson": 8, "kanji": "後ろ", "kana": "うしろ", "romaji": "ushiro", "pos": "noun", "en": "back, behind", "id": "belakang"}, {"lesson": 8, "kanji": "中", "kana": "なか", "romaji": "naka", "pos": "noun", "en": "in, inside", "id": "dalam"}, {"lesson": 8, "kanji": "外", "kana": "そと", "romaji": "soto", "pos": "noun", "en": "out, outside", "id": "luar"}, {"lesson": 8, "kanji": "隣", "kana": "となり", "romaji": "tonari", "pos": "noun", "en": "next, next door", "id": "sebelah"}, {"lesson": 8, "kanji": "間", "kana": "あいだ", "romaji": "aida", "pos": "noun", "en": "between, among", "id": "antara"}, {"lesson": 8, "kanji": "近く", "kana": "ちかく", "romaji": "chikaku", "pos": "noun", "en": "vicinity, neighborhood", "id": "dekat / sekitar"}, {"lesson": 8, "kanji": "あります", "kana": "あります", "romaji": "arimasu", "pos": "verb_I", "en": "exist, be (inanimate)", "id": "ada (benda mati)"}, {"lesson": 8, "kanji": "います", "kana": "います", "romaji": "imasu", "pos": "verb_II", "en": "exist, be (animate)", "id": "ada (makhluk hidup)"}, {"lesson": 8, "kanji": "遠い", "kana": "とおい", "romaji": "tooi", "pos": "adj_i", "en": "far, distant", "id": "jauh"}, {"lesson": 8, "kanji": "近い", "kana": "ちかい", "romaji": "chikai", "pos": "adj_i", "en": "close, near", "id": "dekat"}, {"lesson": 8, "kanji": "忙しい", "kana": "いそがしい", "romaji": "isogashii", "pos": "adj_i", "en": "busy", "id": "sibuk"}, {"lesson": 8, "kanji": "暇", "kana": "ひま", "romaji": "hima", "pos": "adj_na", "en": "having free time", "id": "senggang"}, {"lesson": 8, "kanji": "火山", "kana": "かざん", "romaji": "kazan", "pos": "noun", "en": "volcano", "id": "gunung berapi"}, {"lesson": 8, "kanji": "島", "kana": "しま", "romaji": "shima", "pos": "noun", "en": "island", "id": "pulau"}, {"lesson": 8, "kanji": "湖", "kana": "みずうみ", "romaji": "mizuumi", "pos": "noun", "en": "lake", "id": "danau"}, {"lesson": 8, "kanji": "海岸", "kana": "かいがん", "romaji": "kaigan", "pos": "noun", "en": "beach, coast", "id": "pantai"}, {"lesson": 8, "kanji": "半島", "kana": "はんとう", "romaji": "hantou", "pos": "noun", "en": "peninsula", "id": "semenanjung"}, {"lesson": 8, "kanji": "川", "kana": "かわ", "romaji": "kawa", "pos": "noun", "en": "river", "id": "sungai"}, {"lesson": 8, "kanji": "滝", "kana": "たき", "romaji": "taki", "pos": "noun", "en": "waterfall", "id": "air terjun"}, {"lesson": 8, "kanji": "砂漠", "kana": "さばく", "romaji": "sabaku", "pos": "noun", "en": "desert", "id": "gurun pasir"}, {"lesson": 9, "kanji": "野球", "kana": "やきゅう", "romaji": "yakyuu", "pos": "noun", "en": "baseball", "id": "bisbol"}, {"lesson": 9, "kanji": "漫画", "kana": "まんが", "romaji": "manga", "pos": "noun", "en": "cartoon, comic book", "id": "komik / manga"}, {"lesson": 9, "kanji": "掃除", "kana": "そうじ", "romaji": "souji", "pos": "noun", "en": "cleaning", "id": "bersih-bersih"}, {"lesson": 9, "kanji": "洗濯", "kana": "せんたく", "romaji": "sentaku", "pos": "noun", "en": "laundry", "id": "mencuci pakaian"}, {"lesson": 9, "kanji": "絵", "kana": "え", "romaji": "e", "pos": "noun", "en": "drawing, picture", "id": "gambar, lukisan"}, {"lesson": 9, "kanji": "歌", "kana": "うた", "romaji": "uta", "pos": "noun", "en": "song", "id": "lagu"}, {"lesson": 9, "kanji": "窓", "kana": "まど", "romaji": "mado", "pos": "noun", "en": "window", "id": "jendela"}, {"lesson": 9, "kanji": "買い物", "kana": "かいもの", "romaji": "kaimono", "pos": "noun", "en": "shopping", "id": "belanja"}, {"lesson": 9, "kanji": "天気", "kana": "てんき", "romaji": "tenki", "pos": "noun", "en": "weather", "id": "cuaca"}, {"lesson": 9, "kanji": "雨", "kana": "あめ", "romaji": "ame", "pos": "noun", "en": "rain", "id": "hujan"}, {"lesson": 9, "kanji": "時間", "kana": "じかん", "romaji": "jikan", "pos": "noun", "en": "time", "id": "waktu"}, {"lesson": 9, "kanji": "約束", "kana": "やくそく", "romaji": "yakusoku", "pos": "noun", "en": "appointment, promise", "id": "janji"}, {"lesson": 9, "kanji": "旅行", "kana": "りょこう", "romaji": "ryokou", "pos": "noun", "en": "trip, travel", "id": "wisata, perjalanan"}, {"lesson": 9, "kanji": "分かりました", "kana": "わかりました", "romaji": "wakarimashita", "pos": "verb_I", "en": "understood", "id": "mengerti"}, {"lesson": 9, "kanji": "開けます", "kana": "あけます", "romaji": "akemasu", "pos": "verb_II", "en": "open", "id": "membuka"}, {"lesson": 9, "kanji": "散歩します", "kana": "さんぽします", "romaji": "sanpo shimasu", "pos": "verb_III", "en": "take a walk", "id": "jalan-jalan"}, {"lesson": 9, "kanji": "甘い", "kana": "あまい", "romaji": "amai", "pos": "adj_i", "en": "sweet", "id": "manis"}, {"lesson": 9, "kanji": "辛い", "kana": "からい", "romaji": "karai", "pos": "adj_i", "en": "spicy, hot", "id": "pedas"}, {"lesson": 9, "kanji": "暑い", "kana": "あつい", "romaji": "atsui", "pos": "adj_i", "en": "hot (weather)", "id": "panas (cuaca)"}, {"lesson": 9, "kanji": "寒い", "kana": "さむい", "romaji": "samui", "pos": "adj_i", "en": "cold (weather)", "id": "dingin (cuaca)"}, {"lesson": 9, "kanji": "眠い", "kana": "ねむい", "romaji": "nemui", "pos": "adj_i", "en": "sleepy", "id": "mengantuk"}, {"lesson": 9, "kanji": "好き", "kana": "すき", "romaji": "suki", "pos": "adj_na", "en": "like, favorite", "id": "suka"}, {"lesson": 9, "kanji": "嫌い", "kana": "きらい", "romaji": "kirai", "pos": "adj_na", "en": "dislike", "id": "benci / tidak suka"}, {"lesson": 9, "kanji": "上手", "kana": "じょうず", "romaji": "jouzu", "pos": "adj_na", "en": "good at, skillful", "id": "pandai, mahir"}, {"lesson": 9, "kanji": "下手", "kana": "へた", "romaji": "heta", "pos": "adj_na", "en": "poor at, unskillful", "id": "tidak pandai, payah"}, {"lesson": 9, "kanji": "どうして", "kana": "どうして", "romaji": "doushite", "pos": "adverb", "en": "why", "id": "mengapa"}, {"lesson": 10, "kanji": "プレゼント", "kana": "プレゼント", "romaji": "purezento", "pos": "noun", "en": "present, gift", "id": "hadiah"}, {"lesson": 10, "kanji": "先輩", "kana": "せんぱい", "romaji": "senpai", "pos": "noun", "en": "senior", "id": "senior / kakak kelas"}, {"lesson": 10, "kanji": "後輩", "kana": "こうはい", "romaji": "kouhai", "pos": "noun", "en": "junior", "id": "junior / adik kelas"}, {"lesson": 10, "kanji": "はし", "kana": "はし", "romaji": "hashi", "pos": "noun", "en": "chopsticks", "id": "sumpit"}, {"lesson": 10, "kanji": "手", "kana": "て", "romaji": "te", "pos": "noun", "en": "hand", "id": "tangan"}, {"lesson": 10, "kanji": "荷物", "kana": "にもつ", "romaji": "nimotsu", "pos": "noun", "en": "baggage, parcel", "id": "barang bawaan / paket"}, {"lesson": 10, "kanji": "貸します", "kana": "かします", "romaji": "kashimasu", "pos": "verb_I", "en": "lend", "id": "meminjamkan"}, {"lesson": 10, "kanji": "あげます", "kana": "あげます", "romaji": "agemasu", "pos": "verb_II", "en": "give", "id": "memberi"}, {"lesson": 10, "kanji": "教えます", "kana": "おしえます", "romaji": "oshiemasu", "pos": "verb_II", "en": "teach, tell", "id": "mengajar, memberi tahu"}, {"lesson": 10, "kanji": "送ります", "kana": "おくります", "romaji": "okurimasu", "pos": "verb_I", "en": "send", "id": "mengirim"}, {"lesson": 10, "kanji": "かけます", "kana": "かけます", "romaji": "kakemasu", "pos": "verb_II", "en": "make [a phone call]", "id": "menelepon"}, {"lesson": 10, "kanji": "借ります", "kana": "かります", "romaji": "karimasu", "pos": "verb_II", "en": "borrow", "id": "meminjam"}, {"lesson": 10, "kanji": "習います", "kana": "ならいます", "romaji": "naraimasu", "pos": "verb_I", "en": "learn", "id": "belajar (dari seseorang)"}, {"lesson": 10, "kanji": "もらいます", "kana": "もらいます", "romaji": "moraimasu", "pos": "verb_I", "en": "receive", "id": "menerima"}, {"lesson": 10, "kanji": "話します", "kana": "はなします", "romaji": "hanashimasu", "pos": "verb_I", "en": "talk, speak", "id": "berbicara"}, {"lesson": 10, "kanji": "すてき", "kana": "すてき", "romaji": "suteki", "pos": "adj_na", "en": "nice, wonderful", "id": "bagus sekali, indah"}, {"lesson": 11, "kanji": "鼻", "kana": "はな", "romaji": "hana", "pos": "noun", "en": "nose", "id": "hidung"}, {"lesson": 11, "kanji": "目", "kana": "め", "romaji": "me", "pos": "noun", "en": "eye", "id": "mata"}, {"lesson": 11, "kanji": "首", "kana": "くび", "romaji": "kubi", "pos": "noun", "en": "neck", "id": "leher"}, {"lesson": 11, "kanji": "足", "kana": "あし", "romaji": "ashi", "pos": "noun", "en": "foot, leg", "id": "kaki"}, {"lesson": 11, "kanji": "耳", "kana": "みみ", "romaji": "mimi", "pos": "noun", "en": "ear", "id": "telinga"}, {"lesson": 11, "kanji": "頭", "kana": "あたま", "romaji": "atama", "pos": "noun", "en": "head, brain", "id": "kepala"}, {"lesson": 11, "kanji": "顔", "kana": "かお", "romaji": "kao", "pos": "noun", "en": "face", "id": "wajah"}, {"lesson": 11, "kanji": "口", "kana": "くち", "romaji": "kuchi", "pos": "noun", "en": "mouth", "id": "mulut"}, {"lesson": 11, "kanji": "体", "kana": "からだ", "romaji": "karada", "pos": "noun", "en": "body", "id": "tubuh"}, {"lesson": 11, "kanji": "留学生", "kana": "りゅうがくせい", "romaji": "ryuugakusei", "pos": "noun", "en": "international student", "id": "mahasiswa asing"}, {"lesson": 11, "kanji": "環境", "kana": "かんきょう", "romaji": "kankyou", "pos": "noun", "en": "environment", "id": "lingkungan"}, {"lesson": 11, "kanji": "歴史", "kana": "れきし", "romaji": "rekishi", "pos": "noun", "en": "history", "id": "sejarah"}, {"lesson": 11, "kanji": "仕事", "kana": "しごと", "romaji": "shigoto", "pos": "noun", "en": "work, job", "id": "pekerjaan"}, {"lesson": 11, "kanji": "春", "kana": "はる", "romaji": "haru", "pos": "noun", "en": "spring", "id": "musim semi"}, {"lesson": 11, "kanji": "夏", "kana": "なつ", "romaji": "natsu", "pos": "noun", "en": "summer", "id": "musim panas"}, {"lesson": 11, "kanji": "秋", "kana": "あき", "romaji": "aki", "pos": "noun", "en": "fall, autumn", "id": "musim gugur"}, {"lesson": 11, "kanji": "冬", "kana": "ふゆ", "romaji": "fuyu", "pos": "noun", "en": "winter", "id": "musim dingin"}, {"lesson": 11, "kanji": "多い", "kana": "おおい", "romaji": "ooi", "pos": "adj_i", "en": "a lot, many", "id": "banyak"}, {"lesson": 11, "kanji": "少ない", "kana": "すくない", "romaji": "sukunai", "pos": "adj_i", "en": "a few, little", "id": "sedikit"}, {"lesson": 11, "kanji": "長い", "kana": "ながい", "romaji": "nagai", "pos": "adj_i", "en": "long", "id": "panjang"}, {"lesson": 11, "kanji": "短い", "kana": "みじかい", "romaji": "mijikai", "pos": "adj_i", "en": "short", "id": "pendek"}, {"lesson": 11, "kanji": "暖かい", "kana": "あたたかい", "romaji": "atatakai", "pos": "adj_i", "en": "warm", "id": "hangat"}, {"lesson": 11, "kanji": "涼しい", "kana": "すずしい", "romaji": "suzushii", "pos": "adj_i", "en": "cool", "id": "sejuk"}, {"lesson": 11, "kanji": "明るい", "kana": "あかるい", "romaji": "akarui", "pos": "adj_i", "en": "light, bright", "id": "terang, ceria"}, {"lesson": 11, "kanji": "暗い", "kana": "くらい", "romaji": "kurai", "pos": "adj_i", "en": "dark", "id": "gelap"}, {"lesson": 11, "kanji": "優しい", "kana": "やさしい", "romaji": "yasashii", "pos": "adj_i", "en": "kind, gentle", "id": "baik hati, lembut"}, {"lesson": 11, "kanji": "速い", "kana": "はやい", "romaji": "hayai", "pos": "adj_i", "en": "fast", "id": "cepat"}, {"lesson": 11, "kanji": "遅い", "kana": "おそい", "romaji": "osoi", "pos": "adj_i", "en": "slow, late", "id": "lambat, terlambat"}, {"lesson": 11, "kanji": "大切", "kana": "たいせつ", "romaji": "taisetsu", "pos": "adj_na", "en": "important", "id": "penting"}, {"lesson": 12, "kanji": "休み", "kana": "やすみ", "romaji": "yasumi", "pos": "noun", "en": "break, holiday", "id": "libur, istirahat"}, {"lesson": 12, "kanji": "花見", "kana": "はなみ", "romaji": "hanami", "pos": "noun", "en": "cherry-blossom viewing", "id": "melihat bunga sakura"}, {"lesson": 12, "kanji": "準備", "kana": "じゅんび", "romaji": "junbi", "pos": "noun", "en": "preparation", "id": "persiapan"}, {"lesson": 12, "kanji": "授業", "kana": "じゅぎょう", "romaji": "jugyou", "pos": "noun", "en": "lesson, class", "id": "pelajaran, kuliah"}, {"lesson": 12, "kanji": "空港", "kana": "くうこう", "romaji": "kuukou", "pos": "noun", "en": "airport", "id": "bandara"}, {"lesson": 12, "kanji": "橋", "kana": "はし", "romaji": "hashi", "pos": "noun", "en": "bridge", "id": "jembatan"}, {"lesson": 12, "kanji": "景色", "kana": "けしき", "romaji": "keshiki", "pos": "noun", "en": "view, scenery", "id": "pemandangan"}, {"lesson": 12, "kanji": "発表します", "kana": "はっぴょうします", "romaji": "happyou shimasu", "pos": "verb_III", "en": "make a presentation", "id": "melakukan presentasi"}, {"lesson": 12, "kanji": "登ります", "kana": "のぼります", "romaji": "noborimasu", "pos": "verb_I", "en": "climb (mountain + に)", "id": "mendaki (gunung + に)"}, {"lesson": 12, "kanji": "泊まります", "kana": "とまります", "romaji": "tomarimasu", "pos": "verb_I", "en": "stay overnight (hotel + に)", "id": "menginap (hotel + に)"}, {"lesson": 12, "kanji": "着ます", "kana": "きます", "romaji": "kimasu", "pos": "verb_II", "en": "wear, put on", "id": "memakai (baju)"}, {"lesson": 12, "kanji": "脱ぎます", "kana": "ぬぎます", "romaji": "nugimasu", "pos": "verb_I", "en": "take off", "id": "melepas (pakaian/sepatu)"}, {"lesson": 12, "kanji": "かかります", "kana": "かかります", "romaji": "kakarimasu", "pos": "verb_I", "en": "take (time), cost", "id": "memakan (waktu), berbiaya"}, {"lesson": 12, "kanji": "撮ります", "kana": "とります", "romaji": "torimasu", "pos": "verb_I", "en": "take (a photo)", "id": "mengambil (foto)"}, {"lesson": 12, "kanji": "厳しい", "kana": "きびしい", "romaji": "kibishii", "pos": "adj_i", "en": "strict, severe", "id": "tegas, keras"}, {"lesson": 12, "kanji": "怖い", "kana": "こわい", "romaji": "kowai", "pos": "adj_i", "en": "frightening, scary", "id": "menakutkan"}, {"lesson": 12, "kanji": "重い", "kana": "おもい", "romaji": "omoi", "pos": "adj_i", "en": "heavy", "id": "berat"}, {"lesson": 12, "kanji": "軽い", "kana": "かるい", "romaji": "karui", "pos": "adj_i", "en": "light (weight)", "id": "ringan"}, {"lesson": 12, "kanji": "冷たい", "kana": "つめたい", "romaji": "tsumetai", "pos": "adj_i", "en": "cold (to touch)", "id": "dingin (benda/sentuhan)"}, {"lesson": 12, "kanji": "どのぐらい", "kana": "どのぐらい", "romaji": "dono gurai", "pos": "adverb", "en": "how long / how much", "id": "berapa lama / kira-kira berapa"}, {"lesson": 13, "kanji": "布団", "kana": "ふとん", "romaji": "futon", "pos": "noun", "en": "futon (Japanese bedding)", "id": "kasur lipat Jepang"}, {"lesson": 13, "kanji": "お皿", "kana": "おさら", "romaji": "osara", "pos": "noun", "en": "plate, dish", "id": "piring"}, {"lesson": 13, "kanji": "工場", "kana": "こうじょう", "romaji": "koujou", "pos": "noun", "en": "factory", "id": "pabrik"}, {"lesson": 13, "kanji": "見学", "kana": "けんがく", "romaji": "kengaku", "pos": "noun", "en": "study tour, field trip", "id": "kunjungan studi"}, {"lesson": 13, "kanji": "作り方", "kana": "つくりかた", "romaji": "tsukurikata", "pos": "noun", "en": "how to make", "id": "cara membuat"}, {"lesson": 13, "kanji": "大学院", "kana": "だいがくいん", "romaji": "daigakuin", "pos": "noun", "en": "graduate school", "id": "pascasarjana (S2/S3)"}, {"lesson": 13, "kanji": "工学", "kana": "こうがく", "romaji": "kougaku", "pos": "noun", "en": "engineering", "id": "ilmu teknik"}, {"lesson": 13, "kanji": "将来", "kana": "しょうらい", "romaji": "shourai", "pos": "noun", "en": "future", "id": "masa depan"}, {"lesson": 13, "kanji": "遊びます", "kana": "あそびます", "romaji": "asobimasu", "pos": "verb_I", "en": "have fun, play", "id": "bermain, bersenang-senang"}, {"lesson": 13, "kanji": "返します", "kana": "かえします", "romaji": "kaeshimasu", "pos": "verb_I", "en": "return (something)", "id": "mengembalikan"}, {"lesson": 13, "kanji": "迎えます", "kana": "むかえます", "romaji": "mukaemasu", "pos": "verb_II", "en": "welcome, pick up", "id": "menjemput, menyambut"}, {"lesson": 13, "kanji": "持ちます", "kana": "もちます", "romaji": "mochimasu", "pos": "verb_I", "en": "hold, carry, possess", "id": "membawa, memegang"}, {"lesson": 13, "kanji": "手伝います", "kana": "てつだいます", "romaji": "tetsudaimasu", "pos": "verb_I", "en": "help, assist", "id": "membantu"}, {"lesson": 13, "kanji": "洗います", "kana": "あらいます", "romaji": "araimasu", "pos": "verb_I", "en": "wash", "id": "mencuci"}, {"lesson": 13, "kanji": "使います", "kana": "つかいます", "romaji": "tsukaimasu", "pos": "verb_I", "en": "use", "id": "menggunakan"}, {"lesson": 13, "kanji": "欲しい", "kana": "ほしい", "romaji": "hoshii", "pos": "adj_i", "en": "want (something)", "id": "ingin (sesuatu)"}, {"lesson": 13, "kanji": "痛い", "kana": "いたい", "romaji": "itai", "pos": "adj_i", "en": "painful, sore", "id": "sakit, nyeri"}, {"lesson": 13, "kanji": "大丈夫", "kana": "だいじょうぶ", "romaji": "daijoubu", "pos": "adj_na", "en": "all right, okay", "id": "tidak apa-apa, baik-baik saja"}, {"lesson": 13, "kanji": "珍しい", "kana": "めずらしい", "romaji": "mezurashii", "pos": "adj_i", "en": "rare, unusual", "id": "langka, jarang"}, {"lesson": 13, "kanji": "疲れました", "kana": "つかれました", "romaji": "tsukaremashita", "pos": "phrase", "en": "(I'm) tired.", "id": "Saya lelah."}, {"lesson": 13, "kanji": "のどが渇きました", "kana": "のどがかわきました", "romaji": "nodo ga kawakimashita", "pos": "phrase", "en": "(I'm) thirsty.", "id": "Saya haus."}, {"lesson": 13, "kanji": "おなかがすきました", "kana": "おなかがすきました", "romaji": "onaka ga sukimashita", "pos": "phrase", "en": "(I'm) hungry.", "id": "Saya lapar."}], "grammar": [{"lesson": 1, "pattern": "N1 は N2 です / じゃありません", "romaji": "N1 wa N2 desu / ja arimasen", "en": "N1 is / is not N2", "id": "N1 adalah / bukan N2", "example_ja": "アランさんは会社員じゃありません。銀行員です。", "example_kana": "アランさんはかいしゃいんじゃありません。ぎんこういんです。", "example_romaji": "Aran-san wa kaishain ja arimasen. Ginkouin desu.", "example_en": "Mr. Alan is not a company employee. He is a bank employee.", "example_id": "Saudara Alan bukan karyawan perusahaan. Dia adalah pegawai bank."}, {"lesson": 2, "pattern": "これ / それ / あれ は N です", "romaji": "Kore / Sore / Are wa N desu", "en": "This / That / That over there is N", "id": "Ini / Itu / Itu di sana adalah N", "example_ja": "それはしょうゆです。これは日本語の本です。", "example_kana": "それはしょうゆです。これはにほんごのほんです。", "example_romaji": "Sore wa shouyu desu. Kore wa nihongo no hon desu.", "example_en": "That is soy sauce. This is a Japanese book.", "example_id": "Itu adalah kecap asin. Ini adalah buku bahasa Jepang."}, {"lesson": 3, "pattern": "ここ / そこ / あそこ は Place です", "romaji": "Koko / Soko / Asoko wa Place desu", "en": "Here / There / Over there is [Place]", "id": "Di sini / Di situ / Di sana adalah [Tempat]", "example_ja": "ここは教室です。かわうち駅はあそこです。", "example_kana": "ここはきょうしつです。かわうちえきはあそこです。", "example_romaji": "Koko wa kyoushitsu desu. Kawauchi-eki wa asoko desu.", "example_en": "Here is the classroom. Kawauchi Station is over there.", "example_id": "Di sini adalah ruang kelas. Stasiun Kawauchi ada di sana."}, {"lesson": 4, "pattern": "V1 ます。それから、V2 ます。", "romaji": "V1 masu. Sorekara, V2 masu.", "en": "I do V1. Then, after that, I do V2.", "id": "Melakukan V1. Kemudian, setelah itu, melakukan V2.", "example_ja": "お金を下ろします。それから、靴を買います。", "example_kana": "おかねをおろします。それから、くつをかいます。", "example_romaji": "Okane o oroshimasu. Sorekara, kutsu o kaimasu.", "example_en": "I withdraw money. Then, I buy shoes.", "example_id": "Saya menarik uang. Kemudian, saya membeli sepatu."}, {"lesson": 5, "pattern": "V ます / V ません / V ました / V ませんでした", "romaji": "V-masu / V-masen / V-mashita / V-masen deshita", "en": "Non-past (+) / Non-past (-) / Past (+) / Past (-)", "id": "Bentuk positif / negatif / lampau positif / lampau negatif", "example_ja": "5時に起きます。きのうテレビを見ませんでした。", "example_kana": "ごじにおきます。きのうテレビをみませんでした。", "example_romaji": "Goji ni okimasu. Kinou terebi o mimasen deshita.", "example_en": "I wake up at 5 o'clock. Yesterday I did not watch TV.", "example_id": "Saya bangun jam 5. Kemarin saya tidak menonton TV."}, {"lesson": 6, "pattern": "Vehicle で Place へ 行きます / 来ます / 帰ります", "romaji": "Vehicle de Place e ikimasu / kimasu / kaerimasu", "en": "Go / Come / Return to [Place] by [Vehicle]", "id": "Pergi / Datang / Pulang ke [Tempat] naik [Kendaraan]", "example_ja": "来週新幹線で東京へ行きます。", "example_kana": "らいしゅうしんかんせんでとうきょうへいきます。", "example_romaji": "Raishuu shinkansen de Toukyou e ikimasu.", "example_en": "Next week I will go to Tokyo by Shinkansen.", "example_id": "Minggu depan saya akan pergi ke Tokyo naik Shinkansen."}, {"lesson": 7, "pattern": "Adj-い (～くないです) / Adj-な (～じゃありません)", "romaji": "Adj-i (~kunai desu) / Adj-na (~ja arimasen)", "en": "Negative form of i-adjectives and na-adjectives", "id": "Bentuk negatif kata sifat-i dan kata sifat-na", "example_ja": "このアパートは新しいですが、よくないです。", "example_kana": "このアパートはあたらしいですが、よくないです。", "example_romaji": "Kono apaato wa atarashii desu ga, yokunai desu.", "example_en": "This apartment is new, but it is not good.", "example_id": "Apartemen ini baru, tetapi tidak bagus."}, {"lesson": 8, "pattern": "Place に N が あります / います", "romaji": "Place ni N ga arimasu / imasu", "en": "There is/are [N] at/in [Place] (inanimate / animate)", "id": "Di [Tempat] ada [N] (benda mati / makhluk hidup)", "example_ja": "箱の中に猫がいます。机の下に箱があります。", "example_kana": "はこのなかにねこがいます。つくえのしたにはこがあります。", "example_romaji": "Hako no naka ni neko ga imasu. Tsukue no shita ni hako ga arimasu.", "example_en": "There is a cat inside the box. There is a box under the desk.", "example_id": "Di dalam kotak ada kucing. Di bawah meja ada kotak."}, {"lesson": 9, "pattern": "Clause 1 から、Clause 2", "romaji": "Clause 1 kara, Clause 2", "en": "Because [Clause 1], [Clause 2]", "id": "Karena [Kalimat 1], maka [Kalimat 2]", "example_ja": "暑いですから、窓を開けましょう。", "example_kana": "あついですから、まどをあけましょう。", "example_romaji": "Atsui desu kara, mado o akemashou.", "example_en": "Because it is hot, let's open the window.", "example_id": "Karena panas, mari kita buka jendelanya."}, {"lesson": 10, "pattern": "Person に N を もらいます / 借ります / 習います", "romaji": "Person ni N o moraimasu / karimasu / naraimasu", "en": "Receive / borrow / learn [N] from [Person]", "id": "Menerima / meminjam / belajar [N] dari [Orang]", "example_ja": "日本人の友達に日本語を習いました。", "example_kana": "にほんじんのともだちににほんごをならいました。", "example_romaji": "Nihonjin no tomodachi ni nihongo o naraimashita.", "example_en": "I learned Japanese from my Japanese friend.", "example_id": "Saya belajar bahasa Jepang dari teman orang Jepang."}, {"lesson": 12, "pattern": "Adj-い (～かったです) / Adj-な (～でした)", "romaji": "Adj-i (~katta desu) / Adj-na (~deshita)", "en": "Past tense of i-adjectives and na-adjectives", "id": "Bentuk lampau kata sifat-i dan kata sifat-na", "example_ja": "発表の準備は大変でした。テストはあまり難しくなかったです。", "example_kana": "はっぴょうのじゅんびはたいへんでした。テストはあまりむずかしくなかったです。", "example_romaji": "Happyou no junbi wa taihen deshita. Tesuto wa amari muzukashikunakatta desu.", "example_en": "Presentation preparation was tough. The test was not very difficult.", "example_id": "Persiapan presentasi sangat melelahkan. Ujiannya tidak terlalu sulit."}], "drills": [{"lesson": 1, "category": "Grammar / Particle", "prompt_en": "Choose the correct negative copula: Mr. Alan is NOT a company employee.", "prompt_id": "Pilih bentuk negatif yang tepat: Saudara Alan BUKAN karyawan perusahaan.", "sentence_ja": "アランさんは会社員 ( ? )。", "sentence_kana": "アランさんはかいしゃいん ( ? )。", "sentence_romaji": "Aran-san wa kaishain ( ? ).", "options": ["じゃありません", "ではありませんでした", "くないです", "いません"], "answer": "じゃありません", "explanation_en": "Noun + じゃありません is the polite non-past negative form.", "explanation_id": "Kata Benda + じゃありません digunakan untuk menyangkal kata benda pada waktu sekarang."}, {"lesson": 2, "category": "Interrogative", "prompt_en": "Fill in the blank: 'Whose book is that?' — 'It is a Japanese book.'", "prompt_id": "Isi bagian rumpang: 'Itu buku milik siapa?' — 'Itu buku bahasa Jepang.'", "sentence_ja": "A: それは ( ? ) 本ですか。", "sentence_kana": "A: それは ( ? ) ほんですか。", "sentence_romaji": "A: Sore wa ( ? ) hon desu ka.", "options": ["だれの", "なんの", "だれ", "なん"], "answer": "だれの", "explanation_en": "だれの (dare no) asks for ownership ('whose').", "explanation_id": "だれの (dare no) digunakan untuk menanyakan kepemilikan ('milik siapa')."}, {"lesson": 2, "category": "Interrogative", "prompt_en": "Fill in the blank: 'What kind of CD is this?'", "prompt_id": "Isi bagian rumpang: 'Ini CD tentang apa?'", "sentence_ja": "A: これは ( ? ) CDですか。", "sentence_kana": "A: これは ( ? ) CDですか。", "sentence_romaji": "A: Kore wa ( ? ) CD desu ka.", "options": ["なんの", "だれの", "なん", "どこ"], "answer": "なんの", "explanation_en": "なんの (nan no) asks about the content or category of a noun.", "explanation_id": "なんの (nan no) digunakan untuk menanyakan isi atau jenis suatu benda."}, {"lesson": 3, "category": "Demonstrative", "prompt_en": "Choose the right demonstrative: 'Excuse me, where is the map?' — 'It is over there.'", "prompt_id": "Pilih kata tunjuk tempat yang tepat: 'Permisi, peta ada di mana?' — 'Ada di sana.'", "sentence_ja": "A: すみません。地図は ( ? ) ですか。", "sentence_kana": "A: すみません。ちずは ( ? ) ですか。", "sentence_romaji": "A: Sumimasen. Chizu wa ( ? ) desu ka.", "options": ["どこ", "どれ", "どちら", "なん"], "answer": "どこ", "explanation_en": "どこ (doko) asks for location ('where').", "explanation_id": "どこ (doko) digunakan untuk menanyakan lokasi ('di mana')."}, {"lesson": 4, "category": "Particle", "prompt_en": "Choose the particle connecting two nouns: 'I eat curry and vegetables.'", "prompt_id": "Pilih partikel penghubung dua kata benda: 'Saya makan kari dan sayuran.'", "sentence_ja": "カレー ( ? ) 野菜を食べます。", "sentence_kana": "カレー ( ? ) やさいをたべます。", "sentence_romaji": "Karee ( ? ) yasai o tabemasu.", "options": ["と", "を", "に", "で"], "answer": "と", "explanation_en": "Particle と connects nouns exhaustively ('and').", "explanation_id": "Partikel と menghubungkan dua kata benda yang setara ('dan')."}, {"lesson": 4, "category": "Particle", "prompt_en": "Choose the location of action particle: 'Do you buy things at the convenience store?'", "prompt_id": "Pilih partikel tempat aktivitas: 'Apakah Anda membeli sesuatu di minimarket?'", "sentence_ja": "コンビニ ( ? ) 何か買いますか。", "sentence_kana": "コンビニ ( ? ) なにかかいますか。", "sentence_romaji": "Konbini ( ? ) nanika kaimasu ka.", "options": ["で", "に", "へ", "を"], "answer": "で", "explanation_en": "Particle で marks the place where an action takes place.", "explanation_id": "Partikel で menandai lokasi tempat terjadinya suatu aktivitas."}, {"lesson": 5, "category": "Verb Conjugation", "prompt_en": "Change '起きます (get up)' to its Past Negative form:", "prompt_id": "Ubah '起きます (bangun)' ke bentuk Lampau Negatif:", "sentence_ja": "起きます → ( ? )", "sentence_kana": "おきます → ( ? )", "sentence_romaji": "okimasu → ( ? )", "options": ["起きませんでした", "起きません", "起きました", "起きないでした"], "answer": "起きませんでした", "explanation_en": "Polite past negative of verbs ends in ～ませんでした (~masen deshita).", "explanation_id": "Bentuk lampau negatif sopan untuk kata kerja selalu berakhiran ～ませんでした."}, {"lesson": 6, "category": "Particle", "prompt_en": "Choose the means of transport particle: 'Next week I will go to Tokyo by Shinkansen.'", "prompt_id": "Pilih partikel alat transportasi: 'Minggu depan saya pergi ke Tokyo naik Shinkansen.'", "sentence_ja": "来週新幹線 ( ? ) 東京へ行きます。", "sentence_kana": "らいしゅうしんかんせん ( ? ) とうきょうへいきます。", "sentence_romaji": "Raishuu shinkansen ( ? ) Toukyou e ikimasu.", "options": ["で", "に", "を", "と"], "answer": "で", "explanation_en": "Particle で indicates the means of transportation.", "explanation_id": "Partikel で menunjukkan alat transportasi yang digunakan."}, {"lesson": 7, "category": "Adjective Modification", "prompt_en": "Connect the na-adjective 'きれい (beautiful)' to the noun '写真 (photo)':", "prompt_id": "Hubungkan kata sifat-na 'きれい (indah)' dengan kata benda '写真 (foto)':", "sentence_ja": "( ? ) 写真", "sentence_kana": "( ? ) しゃしん", "sentence_romaji": "( ? ) shashin", "options": ["きれいな", "きれいの", "きれいく", "きれい"], "answer": "きれいな", "explanation_en": "Na-adjectives require な before modifying a noun.", "explanation_id": "Kata sifat-na membutuhkan な saat menerangkan kata benda di belakangnya."}, {"lesson": 8, "category": "Particle", "prompt_en": "Choose the particle for meeting location: 'Let's meet in front of the police box at 2 o'clock.'", "prompt_id": "Pilih partikel tempat bertemu: 'Mari bertemu di depan pos polisi pada pukul 2.'", "sentence_ja": "2時に交番の前 ( ? ) 会いましょう。", "sentence_kana": "にじにこうばんのまえ ( ? ) あいましょう。", "sentence_romaji": "Niji ni kouban no mae ( ? ) aimashou.", "options": ["で", "に", "へ", "を"], "answer": "で", "explanation_en": "Because 会います (meet) is an action, the meeting location takes で.", "explanation_id": "Karena 会います (bertemu) merupakan aktivitas, tempat pertemuannya memakai で."}, {"lesson": 8, "category": "Existence Verb", "prompt_en": "Choose the correct verb: 'There is a cat inside the box.'", "prompt_id": "Pilih kata kerja yang tepat: 'Di dalam kotak ada kucing.'", "sentence_ja": "箱の中に猫が ( ? )。", "sentence_kana": "はこのなかにねこが ( ? )。", "sentence_romaji": "Hako no naka ni neko ga ( ? ).", "options": ["います", "あります", "します", "なります"], "answer": "います", "explanation_en": "Use います for animate beings (people and animals).", "explanation_id": "Gunakan います untuk makhluk hidup (manusia dan hewan)."}, {"lesson": 9, "category": "Particle", "prompt_en": "Choose the particle used with 好き / 上手 / 分かります:", "prompt_id": "Pilih partikel yang digunakan bersama 好き / 上手 / 分かります:", "sentence_ja": "わたしは甘いもの ( ? ) あまり好きじゃありません。", "sentence_kana": "わたしはあまいもの ( ? ) あまりすきじゃありません。", "sentence_romaji": "Watashi wa amai mono ( ? ) amari suki ja arimasen.", "options": ["が", "を", "に", "で"], "answer": "が", "explanation_en": "Adjectives of preference/ability (好き, 嫌い, 上手, 下手) take particle が.", "explanation_id": "Kata sifat kesukaan/kemampuan (好き, 嫌い, 上手, 下手) menggunakan partikel が."}, {"lesson": 10, "category": "Particle", "prompt_en": "Choose the particle for receiving from someone: 'I received pretty flowers from Jose.'", "prompt_id": "Pilih partikel penerima: 'Saya menerima bunga yang indah dari Jose.'", "sentence_ja": "わたしはホセさん ( ? ) きれいな花をもらいました。", "sentence_kana": "わたしはホセさん ( ? ) きれいなはなをもらいました。", "sentence_romaji": "Watashi wa Hose-san ( ? ) kirei na hana o moraimashita.", "options": ["に", "を", "で", "へ"], "answer": "に", "explanation_en": "With もらいます / 借ります / 習います, the giver/source is marked by に (or から).", "explanation_id": "Pada kata kerja もらいます / 借ります / 習います, sumber/pemberi ditandai dengan に."}, {"lesson": 10, "category": "Tool / Means Particle", "prompt_en": "Choose the particle for eating with utensils: 'I eat rice with a spoon and fork.'", "prompt_id": "Pilih partikel alat makan: 'Saya makan nasi menggunakan sendok dan garpu.'", "sentence_ja": "スプーンとフォーク ( ? ) ご飯を食べます。", "sentence_kana": "スプーンとフォーク ( ? ) ごはんをたべます。", "sentence_romaji": "Supuun to fooku ( ? ) gohan o tabemasu.", "options": ["で", "に", "を", "と"], "answer": "で", "explanation_en": "Particle で marks the tool or instrument used to perform an action.", "explanation_id": "Partikel で menandai alat yang digunakan untuk melakukan sesuatu."}, {"lesson": 12, "category": "Past Adjective", "prompt_en": "Change 'いいです (good)' to Past Negative:", "prompt_id": "Ubah 'いいです (bagus)' ke bentuk Lampau Negatif:", "sentence_ja": "いいです → ( ? )", "sentence_kana": "いいです → ( ? )", "sentence_romaji": "ii desu → ( ? )", "options": ["よくなかったです", "いくなかったです", "よかったです", "いいじゃありませんでした"], "answer": "よくなかったです", "explanation_en": "いい conjugates from its stem よい → よくない → よくなかったです.", "explanation_id": "Kata sifat いい berubah dari bentuk dasar よい → よくない → よくなかったです."}, {"lesson": 12, "category": "Past Adjective", "prompt_en": "Change '元気です (healthy)' to Past Negative:", "prompt_id": "Ubah '元気です (sehat)' ke bentuk Lampau Negatif:", "sentence_ja": "元気です → ( ? )", "sentence_kana": "げんきです → ( ? )", "sentence_romaji": "genki desu → ( ? )", "options": ["元気じゃありませんでした", "元気くなかったです", "元気でした", "元気じゃありません"], "answer": "元気じゃありませんでした", "explanation_en": "Na-adjectives and nouns form past negative with ～じゃありませんでした.", "explanation_id": "Kata sifat-na dan kata benda membentuk lampau negatif dengan ～じゃありませんでした."}], "sentences": [{"lesson": 1, "prompt_en": "Mr. Alan is not a company employee. He is a bank employee.", "prompt_id": "Saudara Alan bukan karyawan perusahaan. Dia pegawai bank.", "answer_ja": "アランさんは会社員じゃありません銀行員です", "words": [{"ja": "アランさんは", "kana": "アランさんは", "romaji": "Aran-san wa"}, {"ja": "会社員", "kana": "かいしゃいん", "romaji": "kaishain"}, {"ja": "じゃありません", "kana": "じゃありません", "romaji": "ja arimasen"}, {"ja": "銀行員", "kana": "ぎんこういん", "romaji": "ginkouin"}, {"ja": "です", "kana": "です", "romaji": "desu"}]}, {"lesson": 4, "prompt_en": "I listen to music. Then, I drink coffee.", "prompt_id": "Saya mendengarkan musik. Kemudian, saya minum kopi.", "answer_ja": "音楽を聞きますそれからコーヒーを飲みます", "words": [{"ja": "音楽を", "kana": "おんがくを", "romaji": "ongaku o"}, {"ja": "聞きます", "kana": "ききます", "romaji": "kikimasu"}, {"ja": "それから", "kana": "それから", "romaji": "sorekara"}, {"ja": "コーヒーを", "kana": "コーヒーを", "romaji": "koohii o"}, {"ja": "飲みます", "kana": "のみます", "romaji": "nomimasu"}]}, {"lesson": 6, "prompt_en": "Next week I will go to Tokyo by Shinkansen.", "prompt_id": "Minggu depan saya akan pergi ke Tokyo naik Shinkansen.", "answer_ja": "来週新幹線で東京へ行きます", "words": [{"ja": "来週", "kana": "らいしゅう", "romaji": "raishuu"}, {"ja": "新幹線で", "kana": "しんかんせんで", "romaji": "shinkansen de"}, {"ja": "東京へ", "kana": "とうきょうへ", "romaji": "Toukyou e"}, {"ja": "行きます", "kana": "いきます", "romaji": "ikimasu"}]}, {"lesson": 7, "prompt_en": "The library is spacious, but it is not clean.", "prompt_id": "Perpustakaannya luas, tetapi tidak bersih.", "answer_ja": "図書館は広いですがきれいじゃありません", "words": [{"ja": "図書館は", "kana": "としょかんは", "romaji": "toshokan wa"}, {"ja": "広いですが", "kana": "ひろいですが", "romaji": "hiroi desu ga"}, {"ja": "きれい", "kana": "きれい", "romaji": "kirei"}, {"ja": "じゃありません", "kana": "じゃありません", "romaji": "ja arimasen"}]}, {"lesson": 8, "prompt_en": "Yesterday I went to Yamagata for a half marathon.", "prompt_id": "Kemarin saya pergi ke Yamagata untuk mengikuti half marathon.", "answer_ja": "きのう山形へハーフマラソンに行きました", "words": [{"ja": "きのう", "kana": "きのう", "romaji": "kinou"}, {"ja": "山形へ", "kana": "やまがたへ", "romaji": "Yamagata e"}, {"ja": "ハーフマラソンに", "kana": "ハーフマラソンに", "romaji": "haafu marason ni"}, {"ja": "行きました", "kana": "いきました", "romaji": "ikimashita"}]}, {"lesson": 9, "prompt_en": "Because it is hot, let's open the window.", "prompt_id": "Karena panas, mari kita buka jendelanya.", "answer_ja": "暑いですから窓を開けましょう", "words": [{"ja": "暑いですから", "kana": "あついですから", "romaji": "atsui desu kara"}, {"ja": "窓を", "kana": "まどを", "romaji": "mado o"}, {"ja": "開けましょう", "kana": "あけましょう", "romaji": "akemashou"}]}, {"lesson": 10, "prompt_en": "I learned Japanese from my Japanese friend.", "prompt_id": "Saya belajar bahasa Jepang dari teman orang Jepang.", "answer_ja": "日本人の友達に日本語を習いました", "words": [{"ja": "日本人の", "kana": "にほんじんの", "romaji": "nihonjin no"}, {"ja": "友達に", "kana": "ともだちに", "romaji": "tomodachi ni"}, {"ja": "日本語を", "kana": "にほんごを", "romaji": "nihongo o"}, {"ja": "習いました", "kana": "ならいました", "romaji": "naraimashita"}]}, {"lesson": 12, "prompt_en": "How long does it take from Sendai to Tokyo by Shinkansen?", "prompt_id": "Dari Sendai ke Tokyo naik Shinkansen memakan waktu berapa lama?", "answer_ja": "仙台から東京まで新幹線でどのぐらいかかりますか", "words": [{"ja": "仙台", "kana": "せんだい", "romaji": "Sendai"}, {"ja": "から", "kana": "から", "romaji": "kara"}, {"ja": "東京", "kana": "とうきょう", "romaji": "Toukyou"}, {"ja": "まで", "kana": "まで", "romaji": "made"}, {"ja": "新幹線", "kana": "しんかんせん", "romaji": "shinkansen"}, {"ja": "で", "kana": "で", "romaji": "de"}, {"ja": "どのぐらい", "kana": "どのぐらい", "romaji": "dono gurai"}, {"ja": "かかります", "kana": "かかります", "romaji": "kakarimasu"}, {"ja": "か", "kana": "か", "romaji": "ka"}]}, {"lesson": 12, "prompt_en": "I studied Japanese for about 4 months at a university in my home country.", "prompt_id": "Saya belajar bahasa Jepang sekitar 4 bulan di universitas di negara asal saya.", "answer_ja": "4か月ぐらい国の大学で日本語を勉強しました", "words": [{"ja": "4か月", "kana": "よんかげつ", "romaji": "yonkagetsu"}, {"ja": "ぐらい", "kana": "ぐらい", "romaji": "gurai"}, {"ja": "国の大学で", "kana": "くにのだいがくで", "romaji": "kuni no daigaku de"}, {"ja": "日本語を", "kana": "にほんごを", "romaji": "nihongo o"}, {"ja": "勉強しました", "kana": "べんきょうしました", "romaji": "benkyou shimashita"}]}, {"lesson": 12, "prompt_en": "Yesterday's test was not very difficult.", "prompt_id": "Ujian kemarin tidak terlalu sulit.", "answer_ja": "きのうのテストはあまり難しくなかったです", "words": [{"ja": "きのうの", "kana": "きのうの", "romaji": "kinou no"}, {"ja": "テストは", "kana": "テストは", "romaji": "tesuto wa"}, {"ja": "あまり", "kana": "あまり", "romaji": "amari"}, {"ja": "難しくなかったです", "kana": "むずかしくなかったです", "romaji": "muzukashikunakatta desu"}]}]};
+
+// ==========================================
+// APPLICATION STATE & HELPERS
+// ==========================================
+let score = 0;
+let streak = 0;
+let selectedLesson = "all";
+let searchQuery = "";
+
+let filteredVocab = [...appData.vocabulary];
+let vocabIndex = 0;
+let vocabMode = "flashcard";
+let currentVocabQuiz = null;
+
+let filteredDrills = [...appData.drills];
+let drillIndex = 0;
+let drillAnswered = false;
+
+let filteredSentences = [...appData.sentences];
+let sentenceIndex = 0;
+let builtWords = [];
+let scrambledPool = [];
+
+function addScore(points) {
+  score += points;
+  streak += 1;
+  document.getElementById("score-val").textContent = score;
+  document.getElementById("streak-val").textContent = streak;
+}
+
+function resetStreak() {
+  streak = 0;
+  document.getElementById("streak-val").textContent = streak;
+}
+
+function formatRuby(kanji, kana) {
+  if (!kanji || kanji === kana) return kanji || kana;
+  return `<ruby>${kanji}<rt>${kana}</rt></ruby>`;
+}
+
+function speakText(text) {
+  if (!("speechSynthesis" in window)) return;
+  window.speechSynthesis.cancel();
+  const cleanText = text.replace(/\(\s*\?\s*\)/g, "なに");
+  const utter = new SpeechSynthesisUtterance(cleanText);
+  utter.lang = "ja-JP";
+  utter.rate = 0.9;
+  window.speechSynthesis.speak(utter);
+}
+
+function toggleFurigana() {
+  document.body.classList.toggle("hide-furigana");
+  const btn = document.getElementById("btn-furigana");
+  const isOn = !document.body.classList.contains("hide-furigana");
+  btn.classList.toggle("active", isOn);
+  btn.textContent = isOn ? "あ Furigana: ON" : "あ Furigana: OFF";
+}
+
+function toggleRomaji() {
+  document.body.classList.toggle("hide-romaji");
+  const btn = document.getElementById("btn-romaji");
+  const isOn = !document.body.classList.contains("hide-romaji");
+  btn.classList.toggle("active", isOn);
+  btn.textContent = isOn ? "Aa Romaji: ON" : "Aa Romaji: OFF";
+}
+
+function switchTab(tabName, btnEl) {
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  btnEl.classList.add("active");
+  ["vocab", "grammar", "sentence", "reference"].forEach(id => {
+    document.getElementById("tab-" + id).classList.toggle("hidden", id !== tabName);
+  });
+}
+
+function handleSearch() {
+  searchQuery = document.getElementById("vocab-search").value.trim().toLowerCase();
+  applyFilters();
+}
+
+function filterByLesson() {
+  selectedLesson = document.getElementById("lesson-filter").value;
+  applyFilters();
+}
+
+function applyFilters() {
+  filteredVocab = appData.vocabulary.filter(item => {
+    const lessonMatch = selectedLesson === "all" || String(item.lesson) === selectedLesson;
+    if (!lessonMatch) return false;
+    if (!searchQuery) return true;
+    return (
+      (item.kanji && item.kanji.toLowerCase().includes(searchQuery)) ||
+      (item.kana && item.kana.toLowerCase().includes(searchQuery)) ||
+      (item.romaji && item.romaji.toLowerCase().includes(searchQuery)) ||
+      (item.en && item.en.toLowerCase().includes(searchQuery)) ||
+      (item.id && item.id.toLowerCase().includes(searchQuery))
+    );
+  });
+  if (filteredVocab.length === 0) filteredVocab = [...appData.vocabulary];
+  vocabIndex = 0;
+
+  filteredDrills = selectedLesson === "all"
+    ? [...appData.drills]
+    : appData.drills.filter(d => String(d.lesson) === selectedLesson);
+  if (filteredDrills.length === 0) filteredDrills = [...appData.drills];
+  drillIndex = 0;
+
+  filteredSentences = selectedLesson === "all"
+    ? [...appData.sentences]
+    : appData.sentences.filter(s => String(s.lesson) === selectedLesson);
+  if (filteredSentences.length === 0) filteredSentences = [...appData.sentences];
+  sentenceIndex = 0;
+
+  renderFlashcard();
+  if (vocabMode === "quiz") nextVocabQuiz();
+  renderDrill();
+  renderSentence();
+}
+
+// ==========================================
+// TAB 1: VOCABULARY
+// ==========================================
+function setVocabMode(mode) {
+  vocabMode = mode;
+  document.getElementById("mode-flashcard-btn").classList.toggle("btn-primary", mode === "flashcard");
+  document.getElementById("mode-quiz-btn").classList.toggle("btn-primary", mode === "quiz");
+  document.getElementById("vocab-flashcard-view").classList.toggle("hidden", mode !== "flashcard");
+  document.getElementById("vocab-quiz-view").classList.toggle("hidden", mode !== "quiz");
+  if (mode === "quiz") nextVocabQuiz();
+}
+
+function renderFlashcard() {
+  const item = filteredVocab[vocabIndex];
+  document.getElementById("vocab-counter").textContent = `(${vocabIndex + 1} of ${filteredVocab.length})`;
+  document.getElementById("fc-lesson").textContent = item.lesson === 0 ? "Intro (はじめましょう)" : `Lesson ${item.lesson}`;
+  document.getElementById("fc-pos").textContent = item.pos;
+  document.getElementById("fc-jp").innerHTML = formatRuby(item.kanji, item.kana);
+  document.getElementById("fc-romaji").textContent = item.romaji;
+  document.getElementById("fc-en").textContent = item.en;
+  document.getElementById("fc-id").textContent = item.id;
+
+  document.getElementById("fc-meaning").classList.add("hidden");
+  document.getElementById("fc-hint").classList.remove("hidden");
+}
+
+function flipCard() {
+  document.getElementById("fc-meaning").classList.toggle("hidden");
+  document.getElementById("fc-hint").classList.toggle("hidden");
+}
+
+function nextCard() {
+  vocabIndex = (vocabIndex + 1) % filteredVocab.length;
+  renderFlashcard();
+}
+
+function prevCard() {
+  vocabIndex = (vocabIndex - 1 + filteredVocab.length) % filteredVocab.length;
+  renderFlashcard();
+}
+
+function shuffleVocab() {
+  filteredVocab.sort(() => Math.random() - 0.5);
+  vocabIndex = 0;
+  renderFlashcard();
+}
+
+function speakCurrentVocab() {
+  const item = filteredVocab[vocabIndex];
+  speakText(item.kana || item.kanji);
+}
+
+function nextVocabQuiz() {
+  const pool = filteredVocab.length >= 4 ? filteredVocab : appData.vocabulary;
+  const target = pool[Math.floor(Math.random() * pool.length)];
+  currentVocabQuiz = target;
+
+  const distractors = appData.vocabulary
+    .filter(v => v.en !== target.en)
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 3);
+
+  const choices = [target, ...distractors].sort(() => Math.random() - 0.5);
+
+  document.getElementById("vq-jp").innerHTML = formatRuby(target.kanji, target.kana);
+  document.getElementById("vq-romaji").textContent = target.romaji;
+  const fb = document.getElementById("vq-feedback");
+  fb.classList.add("hidden");
+
+  const optContainer = document.getElementById("vq-options");
+  optContainer.innerHTML = "";
+  choices.forEach(choice => {
+    const btn = document.createElement("button");
+    btn.className = "option-btn";
+    btn.innerHTML = `<div>${choice.en}</div><div style="font-size:0.8rem; color:var(--muted); font-weight:400;">${choice.id}</div>`;
+    btn.onclick = () => {
+      document.querySelectorAll("#vq-options .option-btn").forEach(b => b.disabled = true);
+      if (choice.en === target.en) {
+        btn.classList.add("correct");
+        addScore(10);
+        fb.className = "feedback-banner success";
+        fb.textContent = `✓ Correct! ${target.kanji} (${target.romaji}) = ${target.en} / ${target.id}`;
+      } else {
+        btn.classList.add("wrong");
+        resetStreak();
+        fb.className = "feedback-banner error";
+        fb.textContent = `✗ Incorrect. Answer: ${target.en} (${target.id})`;
+      }
+      fb.classList.remove("hidden");
+    };
+    optContainer.appendChild(btn);
+  });
+}
+
+// ==========================================
+// TAB 2: GRAMMAR & PARTICLE DRILLS
+// ==========================================
+function renderDrill() {
+  const q = filteredDrills[drillIndex];
+  drillAnswered = false;
+  document.getElementById("gd-badge").textContent = `Lesson ${q.lesson} • ${q.category}`;
+  document.getElementById("gd-counter").textContent = `Question ${drillIndex + 1} / ${filteredDrills.length}`;
+  document.getElementById("gd-prompt-en").textContent = q.prompt_en;
+  document.getElementById("gd-prompt-id").textContent = q.prompt_id;
+  document.getElementById("gd-sentence").innerHTML = formatRuby(q.sentence_ja, q.sentence_kana);
+  document.getElementById("gd-romaji").textContent = q.sentence_romaji;
+
+  const fb = document.getElementById("gd-feedback");
+  fb.classList.add("hidden");
+
+  const optGrid = document.getElementById("gd-options");
+  optGrid.innerHTML = "";
+  q.options.forEach(opt => {
+    const btn = document.createElement("button");
+    btn.className = "option-btn";
+    btn.textContent = opt;
+    btn.onclick = () => {
+      if (drillAnswered) return;
+      drillAnswered = true;
+      document.querySelectorAll("#gd-options .option-btn").forEach(b => {
+        b.disabled = true;
+        if (b.textContent === q.answer) b.classList.add("correct");
+      });
+      if (opt === q.answer) {
+        addScore(15);
+        fb.className = "feedback-banner success";
+        fb.innerHTML = `<strong>✓ Correct!</strong> ${q.explanation_en}<br><span style="font-size:0.85rem;">${q.explanation_id}</span>`;
+      } else {
+        btn.classList.add("wrong");
+        resetStreak();
+        fb.className = "feedback-banner error";
+        fb.innerHTML = `<strong>✗ Answer: ${q.answer}</strong> — ${q.explanation_en}<br><span style="font-size:0.85rem;">${q.explanation_id}</span>`;
+      }
+      fb.classList.remove("hidden");
+    };
+    optGrid.appendChild(btn);
+  });
+}
+
+function speakDrillSentence() {
+  const q = filteredDrills[drillIndex];
+  speakText(q.sentence_kana);
+}
+
+function nextDrill() {
+  drillIndex = (drillIndex + 1) % filteredDrills.length;
+  renderDrill();
+}
+
+function prevDrill() {
+  drillIndex = (drillIndex - 1 + filteredDrills.length) % filteredDrills.length;
+  renderDrill();
+}
+
+// ==========================================
+// TAB 3: SENTENCE BUILDER
+// ==========================================
+function renderSentence() {
+  const s = filteredSentences[sentenceIndex];
+  document.getElementById("sb-badge").textContent = `Lesson ${s.lesson} • Word Order & Translation`;
+  document.getElementById("sb-counter").textContent = `Puzzle ${sentenceIndex + 1} / ${filteredSentences.length}`;
+  document.getElementById("sb-prompt-en").textContent = s.prompt_en;
+  document.getElementById("sb-prompt-id").textContent = s.prompt_id;
+
+  builtWords = [];
+  scrambledPool = s.words.map((w, idx) => ({ ...w, uid: idx, used: false }))
+    .sort(() => Math.random() - 0.5);
+
+  document.getElementById("sb-feedback").classList.add("hidden");
+  drawSentenceZones();
+}
+
+function drawSentenceZones() {
+  const dropzone = document.getElementById("sb-dropzone");
+  const bank = document.getElementById("sb-wordbank");
+  dropzone.innerHTML = "";
+  bank.innerHTML = "";
+
+  if (builtWords.length === 0) {
+    dropzone.innerHTML = `<span style="color:#94a3b8; font-size:0.85rem;">Tap tiles from the Word Bank below...</span>`;
+  } else {
+    builtWords.forEach((w, pos) => {
+      const tile = document.createElement("div");
+      tile.className = "word-tile";
+      tile.innerHTML = `<span>${formatRuby(w.ja, w.kana)}</span><span class="tile-sub">${w.romaji}</span>`;
+      tile.onclick = () => {
+        builtWords.splice(pos, 1);
+        const orig = scrambledPool.find(item => item.uid === w.uid);
+        if (orig) orig.used = false;
+        drawSentenceZones();
+      };
+      dropzone.appendChild(tile);
+    });
+  }
+
+  scrambledPool.forEach(w => {
+    const tile = document.createElement("div");
+    tile.className = "word-tile" + (w.used ? " used" : "");
+    tile.innerHTML = `<span>${formatRuby(w.ja, w.kana)}</span><span class="tile-sub">${w.romaji}</span>`;
+    tile.onclick = () => {
+      if (w.used) return;
+      w.used = true;
+      builtWords.push(w);
+      drawSentenceZones();
+    };
+    bank.appendChild(tile);
+  });
+}
+
+function checkSentence() {
+  const s = filteredSentences[sentenceIndex];
+  const userStr = builtWords.map(w => w.ja).join("");
+  const fb = document.getElementById("sb-feedback");
+
+  if (userStr === s.answer_ja) {
+    addScore(20);
+    fb.className = "feedback-banner success";
+    fb.innerHTML = `<strong>✓ Spot on!</strong> ${s.answer_ja}`;
+    speakText(s.words.map(w => w.kana).join(""));
+  } else {
+    resetStreak();
+    fb.className = "feedback-banner error";
+    fb.innerHTML = `<strong>✗ Not quite.</strong><br>Your answer: ${userStr || "(empty)"}<br>Correct order: <strong>${s.answer_ja}</strong>`;
+  }
+  fb.classList.remove("hidden");
+}
+
+function resetSentence() {
+  renderSentence();
+}
+
+function speakSentenceAnswer() {
+  const s = filteredSentences[sentenceIndex];
+  speakText(s.words.map(w => w.kana).join(""));
+}
+
+function nextSentence() {
+  sentenceIndex = (sentenceIndex + 1) % filteredSentences.length;
+  renderSentence();
+}
+
+function prevSentence() {
+  sentenceIndex = (sentenceIndex - 1 + filteredSentences.length) % filteredSentences.length;
+  renderSentence();
+}
+
+// ==========================================
+// TAB 4: GRAMMAR REFERENCE & JSON EDITOR
+// ==========================================
+function renderGrammarReference() {
+  const container = document.getElementById("grammar-ref-list");
+  container.innerHTML = "";
+  appData.grammar.forEach(g => {
+    const div = document.createElement("div");
+    div.className = "grammar-item";
+    div.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <span class="grammar-pattern">Lesson ${g.lesson}: ${g.pattern}</span>
+        <button class="audio-btn" onclick="speakText('${g.example_kana}')">🔊 Example</button>
+      </div>
+      <div class="romaji-text" style="margin-bottom:6px;">${g.romaji}</div>
+      <div style="font-size:0.9rem; font-weight:600;">EN: ${g.en} | ID: ${g.id}</div>
+      <div style="margin-top:8px; padding:10px 12px; background:white; border-radius:8px; border:1px solid var(--border);">
+        <div style="font-weight:700;">${formatRuby(g.example_ja, g.example_kana)}</div>
+        <div class="romaji-text" style="font-size:0.85rem;">${g.example_romaji}</div>
+        <div style="font-size:0.85rem; color:var(--muted); margin-top:2px;">${g.example_en} / ${g.example_id}</div>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+
+  document.getElementById("json-editor-box").value = JSON.stringify(appData, null, 2);
+}
+
+function applyCustomJSON() {
+  const raw = document.getElementById("json-editor-box").value;
+  const status = document.getElementById("json-status");
+  try {
+    const parsed = JSON.parse(raw);
+    if (!parsed.vocabulary || !parsed.drills || !parsed.sentences) {
+      throw new Error("JSON must contain 'vocabulary', 'drills', and 'sentences' arrays.");
+    }
+    appData = parsed;
+    applyFilters();
+    renderGrammarReference();
+    status.className = "feedback-banner success";
+    status.textContent = `✓ Loaded ${appData.vocabulary.length} words, ${appData.drills.length} drills, and ${appData.sentences.length} sentences!`;
+  } catch (err) {
+    status.className = "feedback-banner error";
+    status.textContent = `✗ JSON Error: ${err.message}`;
+  }
+  status.classList.remove("hidden");
+}
+
+function downloadCurrentJSON() {
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData, null, 2));
+  const a = document.createElement("a");
+  a.setAttribute("href", dataStr);
+  a.setAttribute("download", "daichi_complete_dataset.json");
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+}
+
+// Initialize App
+applyFilters();
+renderGrammarReference();
+</script>
+</body>
+</html>
